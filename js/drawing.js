@@ -9,7 +9,7 @@ function drawBoard(board) {
     var width = c.clientWidth;
 
     var dark = false;
-    ctx.lineWidth=1;
+    ctx.lineWidth = 1;
 
     for (var x = 0; x < 8; x++) {
         dark = !dark;
@@ -25,24 +25,24 @@ function drawBoard(board) {
         }
     }
     for (var i = 0; i < board.blackPieces.length; i++) {
-        board.blackPieces[i].draw(ctx, board.blackPieces[i], width / 8);
+        board.blackPieces[i].draw(ctx, width / 8);
     }
     for (var i = 0; i < board.whitePieces.length; i++) {
-        board.whitePieces[i].draw(ctx, board.whitePieces[i], width / 8);
+        board.whitePieces[i].draw(ctx, width / 8);
     }
 
     if (selectedSquare.x >= 0 && selectedSquare.y >= 0) {
         ctx.beginPath();
-        ctx.strokeStyle="red";
-        ctx.lineWidth=3;
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
         ctx.rect(selectedSquare.x * width / 8, selectedSquare.y * width / 8, width / 8, width / 8);
         ctx.stroke();
     }
 
 }
 
-function drawBishop(ctx, piece, width) {
-    var pos = drawPiecePreamble(ctx, piece, width);
+function drawBishop(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.beginPath();
     ctx.moveTo(pos.x - width / 5, pos.y + width / 4);
     ctx.lineTo(pos.x + width / 5, pos.y + width / 4);
@@ -51,8 +51,8 @@ function drawBishop(ctx, piece, width) {
     ctx.fill();
 }
 
-function drawQueen(ctx, piece, width) {
-    var pos = drawPiecePreamble(ctx, piece, width);
+function drawQueen(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.beginPath();
     ctx.moveTo(pos.x - width / 3.5, pos.y + width / 7);
     ctx.lineTo(pos.x + width / 3.5, pos.y + width / 7);
@@ -67,27 +67,27 @@ function drawQueen(ctx, piece, width) {
     ctx.fill();
 }
 
-function drawRook(ctx, piece, width) {
-    var pos = drawPiecePreamble(ctx, piece, width);
+function drawRook(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.fillRect(pos.x - width / 7, pos.y - width / 4, 2 * width / 7, 2 * width / 4);
     ctx.fillRect(pos.x - width / 5, pos.y - width / 4, 2 * width / 5, width / 8);
     ctx.fillRect(pos.x - width / 5, pos.y + width / 4 - width / 8, 2 * width / 5, width / 8);
 }
 
-function drawKing(ctx, piece, width) {
-    var pos = drawPiecePreamble(ctx, piece, width);
+function drawKing(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.fillRect(pos.x - width / 7, pos.y - width / 3.5, 2 * width / 7, 2 * width / 3.5);
     ctx.fillRect(pos.x - width / 3.5, pos.y - width / 7, 2 * width / 3.5, 2 * width / 7);
 }
 
-function drawKnight(ctx, piece, width) {
-    var pos = drawPiecePreamble(ctx, piece, width);
+function drawKnight(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.fillRect(pos.x - width / 5, pos.y - width / 4, 2 * width / 7, 2 * width / 4);
     ctx.fillRect(pos.x - width / 5, pos.y - width / 4, 2 * width / 5, width / 8);
 }
 
-function drawPawn(ctx, piece, width, white) {
-    var pos = drawPiecePreamble(ctx, piece, width, white);
+function drawPawn(ctx, width) {
+    var pos = drawPiecePreamble(ctx, this, width);
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, width / 5, 0, 2 * Math.PI, false);
     ctx.fill();

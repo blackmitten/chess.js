@@ -3,7 +3,7 @@
 var board;
 
 function createNewBoard() {
-    var board = { blackPieces: [], whitePieces: [] };
+    var board = { blackPieces: [], whitePieces: [], getPieceOnSquare: getPieceOnSquare };
     for (var p = 0; p < 8; p++) {
         board.blackPieces.push({ x: p, y: 1, white: false, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
         board.whitePieces.push({ x: p, y: 6, white: true, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
@@ -54,27 +54,27 @@ function onSquareClicked(x, y) {
         selectedSquare.x = x;
         selectedSquare.y = y;
     }
-    var selectedPiece = getPieceOnSquare(board, x, y);
+    var selectedPiece = board.getPieceOnSquare(x, y);
     console.log("clicked on " + x + ", " + y + ": " +
         (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
 
     if (selectedPiece != undefined) {
-        selectedPiece.getLegalMoves();
+        selectedPiece.getLegalMoves(board);
     }
     drawBoard(board);
 }
 
-function getPieceOnSquare(b, x, y) {
+function getPieceOnSquare(x, y) {
     var piece = undefined;
-    for (var i = 0; i < b.blackPieces.length; i++) {
-        if (b.blackPieces[i].x == x && b.blackPieces[i].y == y) {
-            piece = b.blackPieces[i];
+    for (var i = 0; i < this.blackPieces.length; i++) {
+        if (this.blackPieces[i].x == x && this.blackPieces[i].y == y) {
+            piece = this.blackPieces[i];
             break;
         }
     }
-    for (var i = 0; i < b.whitePieces.length; i++) {
-        if (b.whitePieces[i].x == x && b.whitePieces[i].y == y) {
-            piece = b.whitePieces[i];
+    for (var i = 0; i < this.whitePieces.length; i++) {
+        if (this.whitePieces[i].x == x && this.whitePieces[i].y == y) {
+            piece = this.whitePieces[i];
             break;
         }
     }

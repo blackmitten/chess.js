@@ -1,10 +1,32 @@
 "use strict"
 
 function getLegalMovesPawn(board) {
-    if(this.y == 1)
-    {
-        console.log("can move two spaces");
+    var moves = [];
+    if (this.white) {
+        if (this.y > 0) {
+            if (board.getPieceOnSquare(this.x, this.y - 1) == undefined) {
+                moves.push({ x: this.x, y: this.y - 1 });
+            }
+            if (this.y == 6) {
+                if (board.getPieceOnSquare(this.x, this.y - 2) == undefined) {
+                    moves.push({ x: this.x, y: this.y - 2 });
+                }
+            }
+        }
     }
+    else {
+        if (this.y < 7) {
+            if (board.getPieceOnSquare(this.x, this.y + 1) == undefined) {
+                moves.push({ x: this.x, y: this.y + 1 });
+            }
+            if (this.y == 1) {
+                if (board.getPieceOnSquare(this.x, this.y + 2) == undefined) {
+                    moves.push({ x: this.x, y: this.y + 2 });
+                }
+            }
+        }
+    }
+    return moves;
 }
 
 function getLegalMovesRook(board) {
