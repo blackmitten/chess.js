@@ -5,26 +5,26 @@ var board;
 function createNewBoard() {
     var board = { blackPieces: [], whitePieces: [] };
     for (var p = 0; p < 8; p++) {
-        board.blackPieces.push({ x: p, y: 1, white: false, draw: drawPawn });
-        board.whitePieces.push({ x: p, y: 6, white: true, draw: drawPawn });
+        board.blackPieces.push({ x: p, y: 1, white: false, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
+        board.whitePieces.push({ x: p, y: 6, white: true, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
     }
-    board.blackPieces.push({ x: 0, y: 0, white: false, draw: drawRook });
-    board.blackPieces.push({ x: 7, y: 0, white: false, draw: drawRook });
-    board.blackPieces.push({ x: 1, y: 0, white: false, draw: drawKnight });
-    board.blackPieces.push({ x: 6, y: 0, white: false, draw: drawKnight });
-    board.blackPieces.push({ x: 2, y: 0, white: false, draw: drawBishop });
-    board.blackPieces.push({ x: 5, y: 0, white: false, draw: drawBishop });
-    board.blackPieces.push({ x: 3, y: 0, white: false, draw: drawQueen });
-    board.blackPieces.push({ x: 4, y: 0, white: false, draw: drawKing });
+    board.blackPieces.push({ x: 0, y: 0, white: false, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
+    board.blackPieces.push({ x: 7, y: 0, white: false, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
+    board.blackPieces.push({ x: 1, y: 0, white: false, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
+    board.blackPieces.push({ x: 6, y: 0, white: false, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
+    board.blackPieces.push({ x: 2, y: 0, white: false, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
+    board.blackPieces.push({ x: 5, y: 0, white: false, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
+    board.blackPieces.push({ x: 3, y: 0, white: false, draw: drawQueen, name: "queen", getLegalMoves: getLegalMovesQueen });
+    board.blackPieces.push({ x: 4, y: 0, white: false, draw: drawKing, name: "king", getLegalMoves: getLegalMovesKing });
 
-    board.whitePieces.push({ x: 0, y: 7, white: true, draw: drawRook });
-    board.whitePieces.push({ x: 7, y: 7, white: true, draw: drawRook });
-    board.whitePieces.push({ x: 1, y: 7, white: true, draw: drawKnight });
-    board.whitePieces.push({ x: 6, y: 7, white: true, draw: drawKnight });
-    board.whitePieces.push({ x: 2, y: 7, white: true, draw: drawBishop });
-    board.whitePieces.push({ x: 5, y: 7, white: true, draw: drawBishop });
-    board.whitePieces.push({ x: 3, y: 7, white: true, draw: drawQueen });
-    board.whitePieces.push({ x: 4, y: 7, white: true, draw: drawKing });
+    board.whitePieces.push({ x: 0, y: 7, white: true, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
+    board.whitePieces.push({ x: 7, y: 7, white: true, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
+    board.whitePieces.push({ x: 1, y: 7, white: true, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
+    board.whitePieces.push({ x: 6, y: 7, white: true, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
+    board.whitePieces.push({ x: 2, y: 7, white: true, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
+    board.whitePieces.push({ x: 5, y: 7, white: true, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
+    board.whitePieces.push({ x: 3, y: 7, white: true, draw: drawQueen, name: "queen", getLegalMoves: getLegalMovesQueen });
+    board.whitePieces.push({ x: 4, y: 7, white: true, draw: drawKing, name: "king", getLegalMoves: getLegalMovesKing });
     return board;
 }
 
@@ -46,7 +46,6 @@ function onBoardClicked(eventInfo) {
 }
 
 function onSquareClicked(x, y) {
-    console.log("clicked on " + x + ", " + y);
     if (selectedSquare.x == x && selectedSquare.y == y) {
         selectedSquare.x = -1;
         selectedSquare.y = -1;
@@ -55,7 +54,31 @@ function onSquareClicked(x, y) {
         selectedSquare.x = x;
         selectedSquare.y = y;
     }
+    var selectedPiece = getPieceOnSquare(board, x, y);
+    console.log("clicked on " + x + ", " + y + ": " +
+        (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
+
+    if (selectedPiece != undefined) {
+        selectedPiece.getLegalMoves();
+    }
     drawBoard(board);
+}
+
+function getPieceOnSquare(b, x, y) {
+    var piece = undefined;
+    for (var i = 0; i < b.blackPieces.length; i++) {
+        if (b.blackPieces[i].x == x && b.blackPieces[i].y == y) {
+            piece = b.blackPieces[i];
+            break;
+        }
+    }
+    for (var i = 0; i < b.whitePieces.length; i++) {
+        if (b.whitePieces[i].x == x && b.whitePieces[i].y == y) {
+            piece = b.whitePieces[i];
+            break;
+        }
+    }
+    return piece;
 }
 
 main();
