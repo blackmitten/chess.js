@@ -1,8 +1,11 @@
 "use strict"
 
 var board;
+var whitesTurn;
+var selectedPiece;
 
-function createNewBoard() {
+function createNewBoard() 
+{
     var board = { blackPieces: [], whitePieces: [], getPieceOnSquare: getPieceOnSquare };
     for (var p = 0; p < 8; p++) {
         board.blackPieces.push({ x: p, y: 1, white: false, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
@@ -25,6 +28,7 @@ function createNewBoard() {
     board.whitePieces.push({ x: 5, y: 7, white: true, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
     board.whitePieces.push({ x: 3, y: 7, white: true, draw: drawQueen, name: "queen", getLegalMoves: getLegalMovesQueen });
     board.whitePieces.push({ x: 4, y: 7, white: true, draw: drawKing, name: "king", getLegalMoves: getLegalMovesKing });
+    whitesTurn=true;
     return board;
 }
 
@@ -46,20 +50,28 @@ function onBoardClicked(eventInfo) {
 }
 
 function onSquareClicked(x, y) {
-    if (selectedSquare.x == x && selectedSquare.y == y) {
-        selectedSquare.x = -1;
-        selectedSquare.y = -1;
-    }
-    else {
-        selectedSquare.x = x;
-        selectedSquare.y = y;
-    }
-    var selectedPiece = board.getPieceOnSquare(x, y);
-    console.log("clicked on " + x + ", " + y + ": " +
-        (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
+    selectedSquare.x = -1;
+    selectedSquare.y = -1;
+    highlightedSquares = [];
 
-    if (selectedPiece != undefined) {
-        selectedPiece.getLegalMoves(board);
+    if ( selectedPiece == undefined)
+    {
+        selectedPiece = board.getPieceOnSquare(x, y);
+        if ( selectedPiece != undefined && selectedPiece.white == whitesTurn ){
+            selectedSquare.x = x;
+            selectedSquare.y = y;
+            console.log("clicked on " + x + ", " + y + ": " +
+                (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
+        
+            if (selectedPiece != undefined) 
+            {
+                highlightedSquares = selectedPiece.getLegalMoves(board);
+            }
+
+        }
+    }
+    else{
+        selectedPiece=null;
     }
     drawBoard(board);
 }

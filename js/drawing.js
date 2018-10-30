@@ -1,6 +1,7 @@
 "use strict"
 
 var selectedSquare = { x: -1, y: -1 };
+var highlightedSquares = [];
 
 function drawBoard(board) {
     var c = document.getElementById("boardCanvas");
@@ -36,6 +37,15 @@ function drawBoard(board) {
         ctx.strokeStyle = "red";
         ctx.lineWidth = 3;
         ctx.rect(selectedSquare.x * width / 8, selectedSquare.y * width / 8, width / 8, width / 8);
+        ctx.stroke();
+    }
+    for(var i=0;i<highlightedSquares.length;i++)
+    {
+        var square=highlightedSquares[i];
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.rect(square.x * width / 8, square.y * width / 8, width / 8, width / 8);
         ctx.stroke();
     }
 

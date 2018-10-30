@@ -30,21 +30,21 @@ function getLegalMovesPawn(board) {
 }
 
 function getLegalMovesRook(board) {
-
+    return [];
 }
 
 function getLegalMovesKnight(board) {
-
+    return [];
 }
 
 function getLegalMovesBishop(board) {
-
+    return [];
 }
 
 function getLegalMovesQueen(board) {
-
+    return [];
 }
 
 function getLegalMovesKing(board) {
-
+    return [];
 }
