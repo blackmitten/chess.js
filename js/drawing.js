@@ -1,12 +1,16 @@
 "use strict"
 
+var selectedSquare = { x: -1, y: -1 };
 
 function drawBoard(board) {
     var c = document.getElementById("boardCanvas");
     var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.clientWidth, c.clientHeight);
     var width = c.clientWidth;
 
     var dark = false;
+    ctx.lineWidth=1;
+
     for (var x = 0; x < 8; x++) {
         dark = !dark;
         for (var y = 0; y < 8; y++) {
@@ -20,13 +24,21 @@ function drawBoard(board) {
             ctx.fillRect(x * width / 8, y * width / 8, width / 8, width / 8);
         }
     }
-
     for (var i = 0; i < board.blackPieces.length; i++) {
         board.blackPieces[i].draw(ctx, board.blackPieces[i], width / 8);
     }
     for (var i = 0; i < board.whitePieces.length; i++) {
         board.whitePieces[i].draw(ctx, board.whitePieces[i], width / 8);
     }
+
+    if (selectedSquare.x >= 0 && selectedSquare.y >= 0) {
+        ctx.beginPath();
+        ctx.strokeStyle="red";
+        ctx.lineWidth=3;
+        ctx.rect(selectedSquare.x * width / 8, selectedSquare.y * width / 8, width / 8, width / 8);
+        ctx.stroke();
+    }
+
 }
 
 function drawBishop(ctx, piece, width) {

@@ -1,5 +1,6 @@
 "use strict"
 
+var board;
 
 function createNewBoard() {
     var board = { blackPieces: [], whitePieces: [] };
@@ -28,16 +29,33 @@ function createNewBoard() {
 }
 
 function main() {
-    var board = createNewBoard();
+    board = createNewBoard();
     drawBoard(board);
 
     var canvas = document.getElementById("boardCanvas");
-    document.addEventListener("click", onBoardClicked);
+    canvas.addEventListener("click", onBoardClicked);
 
 }
 
 function onBoardClicked(eventInfo) {
-    console.log("clicked");
+    var c = document.getElementById("boardCanvas");
+    var width = c.clientWidth / 8;
+    var x = Math.floor(eventInfo.offsetX / width);
+    var y = Math.floor(eventInfo.offsetY / width);
+    onSquareClicked(x, y);
+}
+
+function onSquareClicked(x, y) {
+    console.log("clicked on " + x + ", " + y);
+    if (selectedSquare.x == x && selectedSquare.y == y) {
+        selectedSquare.x = -1;
+        selectedSquare.y = -1;
+    }
+    else {
+        selectedSquare.x = x;
+        selectedSquare.y = y;
+    }
+    drawBoard(board);
 }
 
 main();
