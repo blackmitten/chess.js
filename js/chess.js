@@ -6,26 +6,26 @@ var selectedPiece;
 function createNewBoard() {
     var board = newBoard();
     for (var p = 0; p < 8; p++) {
-        board.blackPieces.push(newPawn(p, 1, false));
-        board.whitePieces.push(newPawn(p, 6, true));
+        board.blackPieces.push(new Pawn(p, 1, false));
+        board.whitePieces.push(new Pawn(p, 6, true));
     }
-    board.blackPieces.push(newRook(0, 0, false));
-    board.blackPieces.push(newRook(7, 0, false));
-    board.blackPieces.push(newKnight(1, 0, false));
-    board.blackPieces.push(newKnight(6, 0, false));
-    board.blackPieces.push(newBishop(2, 0, false));
-    board.blackPieces.push(newBishop(5, 0, false));
-    board.blackPieces.push(newQueen(3, 0, false));
-    board.blackPieces.push(newKing(4, 0, false));
+    board.blackPieces.push(new Rook(0, 0, false));
+    board.blackPieces.push(new Rook(7, 0, false));
+    board.blackPieces.push(new Knight(1, 0, false));
+    board.blackPieces.push(new Knight(6, 0, false));
+    board.blackPieces.push(new Bishop(2, 0, false));
+    board.blackPieces.push(new Bishop(5, 0, false));
+    board.blackPieces.push(new Queen(3, 0, false));
+    board.blackPieces.push(new King(4, 0, false));
 
-    board.whitePieces.push(newRook(0, 7, true));
-    board.whitePieces.push(newRook(7, 7, true));
-    board.whitePieces.push(newKnight(1, 7, true));
-    board.whitePieces.push(newKnight(6, 7, true));
-    board.whitePieces.push(newBishop(2, 7, true));
-    board.whitePieces.push(newBishop(5, 7, true));
-    board.whitePieces.push(newQueen(3, 7, true));
-    board.whitePieces.push(newKing(4, 7, true));
+    board.whitePieces.push(new Rook(0, 7, true));
+    board.whitePieces.push(new Rook(7, 7, true));
+    board.whitePieces.push(new Knight(1, 7, true));
+    board.whitePieces.push(new Knight(6, 7, true));
+    board.whitePieces.push(new Bishop(2, 7, true));
+    board.whitePieces.push(new Bishop(5, 7, true));
+    board.whitePieces.push(new Queen(3, 7, true));
+    board.whitePieces.push(new King(4, 7, true));
 
     return board;
 }
@@ -44,23 +44,22 @@ function onBoardClicked(eventInfo) {
     var width = c.clientWidth / 8;
     var x = Math.floor(eventInfo.offsetX / width);
     var y = Math.floor(eventInfo.offsetY / width);
-    onSquareClicked(x, y);
+    onSquareClicked({ x: x, y: y });
 }
 
-function onSquareClicked(x, y) {
+function onSquareClicked(clickedSquare) {
     selectedSquare.x = -1;
     selectedSquare.y = -1;
     highlightedSquares = [];
-    var clickedSquare = { x: x, y: y };
-    var clickedPiece = board.getPieceOnSquare(x, y);
+    var clickedPiece = board.getPieceOnSquare(clickedSquare);
 
     if (selectedPiece == undefined) {
         if (clickedPiece != undefined) {
             if (clickedPiece.white == board.whitesTurn) {
                 selectedPiece = clickedPiece;
-                selectedSquare.x = x;
-                selectedSquare.y = y;
-                console.log("clicked on " + x + ", " + y + ": " +
+                selectedSquare.x = clickedSquare.x;
+                selectedSquare.y = clickedSquare.y;
+                console.log("clicked on " + clickedSquare.x + ", " + clickedSquare.y + ": " +
                     (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
 
                 if (selectedPiece != undefined) {
