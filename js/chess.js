@@ -3,35 +3,9 @@
 var board;
 var selectedPiece;
 
-function createNewBoard() {
-    var board = newBoard();
-    for (var p = 0; p < 8; p++) {
-        board.blackPieces.push(new Pawn(p, 1, false));
-        board.whitePieces.push(new Pawn(p, 6, true));
-    }
-    board.blackPieces.push(new Rook(0, 0, false));
-    board.blackPieces.push(new Rook(7, 0, false));
-    board.blackPieces.push(new Knight(1, 0, false));
-    board.blackPieces.push(new Knight(6, 0, false));
-    board.blackPieces.push(new Bishop(2, 0, false));
-    board.blackPieces.push(new Bishop(5, 0, false));
-    board.blackPieces.push(new Queen(3, 0, false));
-    board.blackPieces.push(new King(4, 0, false));
-
-    board.whitePieces.push(new Rook(0, 7, true));
-    board.whitePieces.push(new Rook(7, 7, true));
-    board.whitePieces.push(new Knight(1, 7, true));
-    board.whitePieces.push(new Knight(6, 7, true));
-    board.whitePieces.push(new Bishop(2, 7, true));
-    board.whitePieces.push(new Bishop(5, 7, true));
-    board.whitePieces.push(new Queen(3, 7, true));
-    board.whitePieces.push(new King(4, 7, true));
-
-    return board;
-}
-
 function main() {
-    board = createNewBoard();
+    board = new Board();
+    board.initNewGame();
     drawBoard(board);
 
     var canvas = document.getElementById("boardCanvas");
