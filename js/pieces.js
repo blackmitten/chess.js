@@ -1,10 +1,20 @@
-"use strict"
+import * as Drawing from "./drawing.js";
+
+"use strict";
+
+export {Pawn};
+export {Rook};
+export {Knight};
+export {Bishop};
+export {Queen};
+export {King};
+
 
 function Pawn(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawPawn;
+    this.draw = Drawing.drawPawn;
     this.name = "pawn";
 
     this.copy = function () {
@@ -13,6 +23,7 @@ function Pawn(x, y, white) {
 
     this.getLegalMoves = function (board) {
         var moves = [];
+        var pieceToTake;
         if (this.white) {
             if (this.y > 0) {
                 if (board.getPieceOnSquare({x:this.x, y:this.y - 1}) == undefined) {
@@ -23,7 +34,7 @@ function Pawn(x, y, white) {
                         }
                     }
                 }
-                var pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y - 1});
+                pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y - 1});
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x - 1, y: this.y - 1 });
                 }
@@ -43,7 +54,7 @@ function Pawn(x, y, white) {
                         }
                     }
                 }
-                var pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y + 1});
+                pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y + 1});
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x - 1, y: this.y + 1 });
                 }
@@ -62,7 +73,7 @@ function Rook(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawRook;
+    this.draw = Drawing.drawRook;
     this.name = "rook";
 
     this.copy = function () {
@@ -78,7 +89,7 @@ function Knight(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawKnight;
+    this.draw = Drawing.drawKnight;
     this.name = "Knight";
 
     this.copy = function () {
@@ -95,7 +106,7 @@ function Bishop(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawBishop;
+    this.draw = Drawing.drawBishop;
     this.name = "Bishop";
     this.copy = function () {
         return new Bishop(this.x, this.y, this.white);
@@ -110,7 +121,7 @@ function Queen(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawQueen;
+    this.draw = Drawing.drawQueen;
     this.name = "Queen";
 
     this.copy = function () {
@@ -126,7 +137,7 @@ function King(x, y, white) {
     this.x = x;
     this.y = y;
     this.white = white;
-    this.draw = drawKing;
+    this.draw = Drawing.drawKing;
     this.name = "King";
 
     this.copy = function () {

@@ -1,7 +1,17 @@
-"use strict"
+import {highlightedSquares} from "./chess.js";
+import {selectedSquare} from "./chess.js";
 
-var selectedSquare = { x: -1, y: -1 };
-var highlightedSquares = [];
+"use strict";
+
+export {drawBoard};
+export {drawBishop};
+export {drawQueen};
+export {drawRook};
+export {drawKing};
+export {drawKnight};
+export {drawPawn};
+
+
 
 function drawBoard(board) {
     var c = document.getElementById("boardCanvas");
@@ -28,7 +38,7 @@ function drawBoard(board) {
     for (var i = 0; i < board.blackPieces.length; i++) {
         board.blackPieces[i].draw(ctx, width / 8);
     }
-    for (var i = 0; i < board.whitePieces.length; i++) {
+    for (i = 0; i < board.whitePieces.length; i++) {
         board.whitePieces[i].draw(ctx, width / 8);
     }
 
@@ -39,7 +49,7 @@ function drawBoard(board) {
         ctx.rect(selectedSquare.x * width / 8, selectedSquare.y * width / 8, width / 8, width / 8);
         ctx.stroke();
     }
-    for (var i = 0; i < highlightedSquares.length; i++) {
+    for (i = 0; i < highlightedSquares.length; i++) {
         var square = highlightedSquares[i];
         ctx.beginPath();
         ctx.strokeStyle = "white";
@@ -106,5 +116,5 @@ function drawPiecePreamble(ctx, piece, width) {
     ctx.fillStyle = piece.white ? "#fff" : "#000";
     var x = piece.x * width + width / 2;
     var y = piece.y * width + width / 2;
-    return { x, y };
+    return { x:x, y:y };
 }

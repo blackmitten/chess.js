@@ -1,12 +1,21 @@
-"use strict"
+import {Board} from "./board.js";
+import * as Drawing from "./drawing.js";
+
+"use strict";
+
 
 var board;
 var selectedPiece;
+var selectedSquare = { x: -1, y: -1 };
+var highlightedSquares = [];
+
+export {selectedSquare};
+export {highlightedSquares};
 
 function main() {
     board = new Board();
     board.initNewGame();
-    drawBoard(board);
+    Drawing.drawBoard(board);
 
     var canvas = document.getElementById("boardCanvas");
     canvas.addEventListener("click", onBoardClicked);
@@ -55,7 +64,7 @@ function onSquareClicked(clickedSquare) {
         }
         selectedPiece = null;
     }
-    drawBoard(board);
+    Drawing.drawBoard(board);
 }
 
 function checkArrayForSquare(square, squares) {
