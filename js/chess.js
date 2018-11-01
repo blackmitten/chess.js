@@ -1,34 +1,33 @@
 "use strict"
 
 var board;
-var whitesTurn;
 var selectedPiece;
 
 function createNewBoard() 
 {
-    var board = { blackPieces: [], whitePieces: [], getPieceOnSquare: getPieceOnSquare };
+    var board = newBoard();
     for (var p = 0; p < 8; p++) {
-        board.blackPieces.push({ x: p, y: 1, white: false, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
-        board.whitePieces.push({ x: p, y: 6, white: true, draw: drawPawn, name: "pawn", getLegalMoves: getLegalMovesPawn });
+        board.blackPieces.push( newPawn(p, 1, false) );
+        board.whitePieces.push( newPawn(p, 6, true) );
     }
-    board.blackPieces.push({ x: 0, y: 0, white: false, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
-    board.blackPieces.push({ x: 7, y: 0, white: false, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
-    board.blackPieces.push({ x: 1, y: 0, white: false, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
-    board.blackPieces.push({ x: 6, y: 0, white: false, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
-    board.blackPieces.push({ x: 2, y: 0, white: false, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
-    board.blackPieces.push({ x: 5, y: 0, white: false, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
-    board.blackPieces.push({ x: 3, y: 0, white: false, draw: drawQueen, name: "queen", getLegalMoves: getLegalMovesQueen });
-    board.blackPieces.push({ x: 4, y: 0, white: false, draw: drawKing, name: "king", getLegalMoves: getLegalMovesKing });
+    board.blackPieces.push( newRook(0,0,false) );
+    board.blackPieces.push( newRook(7,0,false) );
+    board.blackPieces.push( newKnight(1,0,false));
+    board.blackPieces.push( newKnight(6,0,false));
+    board.blackPieces.push( newBishop(2,0,false));
+    board.blackPieces.push( newBishop(5,0,false));
+    board.blackPieces.push( newQueen(3,0,false));
+    board.blackPieces.push( newKing( 4, 0, false));
 
-    board.whitePieces.push({ x: 0, y: 7, white: true, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
-    board.whitePieces.push({ x: 7, y: 7, white: true, draw: drawRook, name: "rook", getLegalMoves: getLegalMovesRook });
-    board.whitePieces.push({ x: 1, y: 7, white: true, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
-    board.whitePieces.push({ x: 6, y: 7, white: true, draw: drawKnight, name: "knight", getLegalMoves: getLegalMovesKnight });
-    board.whitePieces.push({ x: 2, y: 7, white: true, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
-    board.whitePieces.push({ x: 5, y: 7, white: true, draw: drawBishop, name: "bishop", getLegalMoves: getLegalMovesBishop });
-    board.whitePieces.push({ x: 3, y: 7, white: true, draw: drawQueen, name: "queen", getLegalMoves: getLegalMovesQueen });
-    board.whitePieces.push({ x: 4, y: 7, white: true, draw: drawKing, name: "king", getLegalMoves: getLegalMovesKing });
-    whitesTurn=true;
+    board.whitePieces.push( newRook(0,7,true));
+    board.whitePieces.push( newRook(7,7,true));
+    board.whitePieces.push( newKnight(1,7,true));
+    board.whitePieces.push( newKnight(6,7,true));
+    board.whitePieces.push( newBishop(2,7,true));
+    board.whitePieces.push( newBishop(5,7,true));
+    board.whitePieces.push( newQueen(3,7,true));
+    board.whitePieces.push( newKing( 4, 7, true));
+
     return board;
 }
 
@@ -53,44 +52,56 @@ function onSquareClicked(x, y) {
     selectedSquare.x = -1;
     selectedSquare.y = -1;
     highlightedSquares = [];
-
-    if ( selectedPiece == undefined)
+    var clickedSquare = {x:x, y:y};
+    var clickedPiece = board.getPieceOnSquare(x, y);
+    
+    if ( selectedPiece == undefined )
     {
-        selectedPiece = board.getPieceOnSquare(x, y);
-        if ( selectedPiece != undefined && selectedPiece.white == whitesTurn ){
-            selectedSquare.x = x;
-            selectedSquare.y = y;
-            console.log("clicked on " + x + ", " + y + ": " +
-                (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
-        
-            if (selectedPiece != undefined) 
+        if ( clickedPiece != undefined )
+        {
+            if ( clickedPiece.white == board.whitesTurn )
             {
-                highlightedSquares = selectedPiece.getLegalMoves(board);
+                selectedPiece = clickedPiece;
+                selectedSquare.x = x;
+                selectedSquare.y = y;
+                console.log("clicked on " + x + ", " + y + ": " +
+                    (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
+            
+                if (selectedPiece != undefined) 
+                {
+                    highlightedSquares = selectedPiece.getLegalMoves(board);
+                }    
+        
             }
-
         }
+
     }
     else{
+        var legalMoves = selectedPiece.getLegalMoves(board);
+        if(checkArrayForSquare( clickedSquare,legalMoves))
+        {
+            board = board.movePiece( selectedPiece, clickedSquare );
+            console.log("legal");
+        }
+        else
+        {
+            console.log("not legal");
+        }
         selectedPiece=null;
     }
     drawBoard(board);
 }
 
-function getPieceOnSquare(x, y) {
-    var piece = undefined;
-    for (var i = 0; i < this.blackPieces.length; i++) {
-        if (this.blackPieces[i].x == x && this.blackPieces[i].y == y) {
-            piece = this.blackPieces[i];
-            break;
+function checkArrayForSquare( square, squares )
+{
+    for(var i=0; i<squares.length; i++)
+    {
+        if(square.x == squares[i].x && square.y == squares[i].y)
+        {
+            return true;
         }
     }
-    for (var i = 0; i < this.whitePieces.length; i++) {
-        if (this.whitePieces[i].x == x && this.whitePieces[i].y == y) {
-            piece = this.whitePieces[i];
-            break;
-        }
-    }
-    return piece;
+    return false;
 }
 
 main();
