@@ -39,9 +39,8 @@ function drawBoard(board) {
         ctx.rect(selectedSquare.x * width / 8, selectedSquare.y * width / 8, width / 8, width / 8);
         ctx.stroke();
     }
-    for(var i=0;i<highlightedSquares.length;i++)
-    {
-        var square=highlightedSquares[i];
+    for (var i = 0; i < highlightedSquares.length; i++) {
+        var square = highlightedSquares[i];
         ctx.beginPath();
         ctx.strokeStyle = "white";
         ctx.lineWidth = 2;

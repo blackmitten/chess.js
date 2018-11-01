@@ -1,19 +1,18 @@
 "use strict"
 
-function newPawn(x, y, white)
-{
-    return{
+function newPawn(x, y, white) {
+    return {
         x: x,
         y: y,
         white: white,
         draw: drawPawn,
-        name: "pawn", 
+        name: "pawn",
 
-        copy: function(){
-            return newPawn(this.x,this.y,this.white);
+        copy: function () {
+            return newPawn(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             var moves = [];
             if (this.white) {
                 if (this.y > 0) {
@@ -44,98 +43,93 @@ function newPawn(x, y, white)
     }
 }
 
-function newRook(x,y,white)
-{
-    return{
-        x: x, 
-        y: y, 
+function newRook(x, y, white) {
+    return {
+        x: x,
+        y: y,
         white: white,
         draw: drawRook,
         name: "rook",
 
-        copy: function(){
-            return newRook(this.x,this.y,this.white);
+        copy: function () {
+            return newRook(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             return [];
-        } 
+        }
     };
 }
 
-function newKnight(x,y,white)
-{
-    return{
-        x: x, 
-        y: y, 
+function newKnight(x, y, white) {
+    return {
+        x: x,
+        y: y,
         white: white,
         draw: drawKnight,
         name: "Knight",
 
-        copy: function(){
-            return newKnight(this.x,this.y,this.white);
+        copy: function () {
+            return newKnight(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             return [];
-        } 
+        }
     };
 }
 
-function newBishop(x,y,white)
-{
-    return{
-        x: x, 
-        y: y, 
+function newBishop(x, y, white) {
+    return {
+        x: x,
+        y: y,
         white: white,
         draw: drawBishop,
         name: "Bishop",
 
-        copy: function(){
-            return newBishop(this.x,this.y,this.white);
+        copy: function () {
+            return newBishop(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             return [];
-        } 
+        }
     };
 }
 
-function newQueen(x,y,white)
-{
-    return{
-        x: x, 
-        y: y, 
+function newQueen(x, y, white) {
+    return {
+        x: x,
+        y: y,
         white: white,
         draw: drawQueen,
         name: "Queen",
 
-        copy: function(){
-            return newQueen(this.x,this.y,this.white);
+        copy: function () {
+            return newQueen(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             return [];
-        } 
+        }
     };
 }
 
-function newKing(x,y,white)
-{
-    return{
-        x: x, 
-        y: y, 
+function newKing(x, y, white) {
+    return {
+        x: x,
+        y: y,
         white: white,
         draw: drawKing,
         name: "King",
 
-        copy: function(){
-            return newKing(this.x,this.y,this.white);
+        copy: function () {
+            return newKing(this.x, this.y, this.white);
         },
 
-        getLegalMoves: function(board){
+        getLegalMoves: function (board) {
             return [];
-        } 
+        }
     };
 }
 

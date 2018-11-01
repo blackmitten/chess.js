@@ -1,14 +1,12 @@
 "use strict"
 
-function newBoard()
-{
-    return { 
-        blackPieces: [], 
-        whitePieces: [], 
-        whitesTurn: true, 
+function newBoard() {
+    return {
+        blackPieces: [],
+        whitePieces: [],
+        whitesTurn: true,
 
-        movePiece: function(piece, destinationSquare)
-        {
+        movePiece: function (piece, destinationSquare) {
             var board = this.copy();
             var pieceCopy = board.getPieceOnSquare(piece.x, piece.y);
             pieceCopy.x = destinationSquare.x;
@@ -16,23 +14,20 @@ function newBoard()
             board.whitesTurn = !board.whitesTurn;
             return board;
         },
-        copy: function()
-        {
+        copy: function () {
             board = newBoard();
-            for(var i=0;i<this.blackPieces.length;i++)
-            {
+            for (var i = 0; i < this.blackPieces.length; i++) {
                 board.blackPieces.push(this.blackPieces[i].copy());
             }
-            for(var i=0;i<this.whitePieces.length;i++)
-            {
+            for (var i = 0; i < this.whitePieces.length; i++) {
                 board.whitePieces.push(this.whitePieces[i].copy());
             }
-            board.whitesTurn=this.whitesTurn;
+            board.whitesTurn = this.whitesTurn;
             return board;
         },
 
-        getPieceOnSquare: getPieceOnSquare, 
-    };    
+        getPieceOnSquare: getPieceOnSquare,
+    };
 }
 
 function getPieceOnSquare(x, y) {
