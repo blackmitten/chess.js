@@ -2,12 +2,12 @@ import * as Drawing from "./drawing.js";
 
 "use strict";
 
-export {Pawn};
-export {Rook};
-export {Knight};
-export {Bishop};
-export {Queen};
-export {King};
+export { Pawn };
+export { Rook };
+export { Knight };
+export { Bishop };
+export { Queen };
+export { King };
 
 
 function Pawn(x, y, white) {
@@ -26,19 +26,19 @@ function Pawn(x, y, white) {
         var pieceToTake;
         if (this.white) {
             if (this.y > 0) {
-                if (board.getPieceOnSquare({x:this.x, y:this.y - 1}) == undefined) {
+                if (board.getPieceOnSquare({ x: this.x, y: this.y - 1 }) == undefined) {
                     moves.push({ x: this.x, y: this.y - 1 });
                     if (this.y == 6) {
-                        if (board.getPieceOnSquare({x:this.x, y:this.y - 2}) == undefined) {
+                        if (board.getPieceOnSquare({ x: this.x, y: this.y - 2 }) == undefined) {
                             moves.push({ x: this.x, y: this.y - 2 });
                         }
                     }
                 }
-                pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y - 1});
+                pieceToTake = board.getPieceOnSquare({ x: this.x - 1, y: this.y - 1 });
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x - 1, y: this.y - 1 });
                 }
-                pieceToTake = board.getPieceOnSquare({x:this.x + 1, y:this.y - 1});
+                pieceToTake = board.getPieceOnSquare({ x: this.x + 1, y: this.y - 1 });
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x + 1, y: this.y - 1 });
                 }
@@ -46,19 +46,19 @@ function Pawn(x, y, white) {
         }
         else {
             if (this.y < 7) {
-                if (board.getPieceOnSquare({x:this.x, y:this.y + 1}) == undefined) {
+                if (board.getPieceOnSquare({ x: this.x, y: this.y + 1 }) == undefined) {
                     moves.push({ x: this.x, y: this.y + 1 });
                     if (this.y == 1) {
-                        if (board.getPieceOnSquare({x:this.x, y:this.y + 2}) == undefined) {
+                        if (board.getPieceOnSquare({ x: this.x, y: this.y + 2 }) == undefined) {
                             moves.push({ x: this.x, y: this.y + 2 });
                         }
                     }
                 }
-                pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y + 1});
+                pieceToTake = board.getPieceOnSquare({ x: this.x - 1, y: this.y + 1 });
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x - 1, y: this.y + 1 });
                 }
-                pieceToTake = board.getPieceOnSquare({x:this.x + 1, y:this.y + 1});
+                pieceToTake = board.getPieceOnSquare({ x: this.x + 1, y: this.y + 1 });
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x + 1, y: this.y + 1 });
                 }
@@ -81,9 +81,32 @@ function Rook(x, y, white) {
     };
 
     this.getLegalMoves = function (board) {
-        return [];
-    }
+        var moves = [];
+        for (var x = this.x + 1; x <= 7; x++) {
+            addMoveIfOk(board, moves, {x:x, y:this.y});
+        }
+        for (x = this.x - 1; x >= 0; x--) {
+            addMoveIfOk(board, moves, {x:x, y:this.y});
+        }
+        for (var y = this.y + 1; y <= 7; y++) {
+            addMoveIfOk(board, moves, {x:this.x, y:y});
+        }
+        for (y = this.y - 1; y >= 0; y--) {
+            addMoveIfOk(board, moves, {x:this.x, y:y});
+        }
+        return moves;
+    };
 }
+
+function addMoveIfOk(board, moves, square) {
+    var pieceOnSquare = board.getPieceOnSquare(square);
+    if ( pieceOnSquare == undefined ) {
+        moves.push({ x: square.x, y: square.y });
+    }
+    else if ( this.white != pieceOnSquare.white ){
+        moves.push({ x: square.x, y: square.y });
+    }
+} 
 
 function Knight(x, y, white) {
     this.x = x;
@@ -98,7 +121,7 @@ function Knight(x, y, white) {
 
     this.getLegalMoves = function (board) {
         return [];
-    }
+    };
 
 }
 
@@ -113,7 +136,7 @@ function Bishop(x, y, white) {
     };
     this.getLegalMoves = function (board) {
         return [];
-    }
+    };
 
 }
 
@@ -130,7 +153,7 @@ function Queen(x, y, white) {
 
     this.getLegalMoves = function (board) {
         return [];
-    }
+    };
 }
 
 function King(x, y, white) {
@@ -146,7 +169,6 @@ function King(x, y, white) {
 
     this.getLegalMoves = function (board) {
         return [];
-    }
+    };
 
 }
-
