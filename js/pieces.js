@@ -83,16 +83,24 @@ function Rook(x, y, white) {
     this.getLegalMoves = function (board) {
         var moves = [];
         for (var x = this.x + 1; x <= 7; x++) {
-            addMoveIfOk(this, board, moves, {x:x, y:this.y});
+            if (!addMoveIfOk(this, board, moves, { x: x, y: this.y })) {
+                break;
+            }
         }
         for (x = this.x - 1; x >= 0; x--) {
-            addMoveIfOk(this, board, moves, {x:x, y:this.y});
+            if (!addMoveIfOk(this, board, moves, { x: x, y: this.y })) {
+                break;
+            }
         }
         for (var y = this.y + 1; y <= 7; y++) {
-            addMoveIfOk(this, board, moves, {x:this.x, y:y});
+            if (!addMoveIfOk(this, board, moves, { x: this.x, y: y })) {
+                break;
+            }
         }
         for (y = this.y - 1; y >= 0; y--) {
-            addMoveIfOk(this, board, moves, {x:this.x, y:y});
+            if (!addMoveIfOk(this, board, moves, { x: this.x, y: y })) {
+                break;
+            }
         }
         return moves;
     };
@@ -100,13 +108,16 @@ function Rook(x, y, white) {
 
 function addMoveIfOk(piece, board, moves, square) {
     var pieceOnSquare = board.getPieceOnSquare(square);
-    if ( pieceOnSquare == undefined ) {
+    if (pieceOnSquare == undefined) {
         moves.push({ x: square.x, y: square.y });
+        return true;
     }
-    else if ( piece.white != pieceOnSquare.white ){
+    else if (piece.white != pieceOnSquare.white) {
         moves.push({ x: square.x, y: square.y });
+        return true;
     }
-} 
+    return false;
+}
 
 function Knight(x, y, white) {
     this.x = x;
