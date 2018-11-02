@@ -82,38 +82,34 @@ function Rook(x, y, white) {
 
     this.getLegalMoves = function (board) {
         var moves = [];
-        for (var x = this.x + 1; x <= 7; x++) {
-            if (!addMoveIfOk(this, board, moves, { x: x, y: this.y })) {
-                break;
-            }
-        }
-        for (x = this.x - 1; x >= 0; x--) {
-            if (!addMoveIfOk(this, board, moves, { x: x, y: this.y })) {
-                break;
-            }
-        }
-        for (var y = this.y + 1; y <= 7; y++) {
-            if (!addMoveIfOk(this, board, moves, { x: this.x, y: y })) {
-                break;
-            }
-        }
-        for (y = this.y - 1; y >= 0; y--) {
-            if (!addMoveIfOk(this, board, moves, { x: this.x, y: y })) {
-                break;
-            }
-        }
+        var x=this.x;
+        var y=this.y;
+        while(addMoveIfOk(this, board, moves, {x: ++x, y: y }));
+        x=this.x;
+        y=this.y;
+        while(addMoveIfOk(this, board, moves, {x: --x, y: y }));
+        x=this.x;
+        y=this.y;
+        while(addMoveIfOk(this, board, moves, {x: x, y: ++y }));
+        x=this.x;
+        y=this.y;
+        while(addMoveIfOk(this, board, moves, {x: x, y: --y }));
+
         return moves;
     };
 }
 
 function addMoveIfOk(piece, board, moves, square) {
+    if ( square.x < 0 || square.x > 7 || square.y < 0 || square.y > 7 ){
+        return false;
+    }
     var pieceOnSquare = board.getPieceOnSquare(square);
     if (pieceOnSquare == undefined) {
-        moves.push({ x: square.x, y: square.y });
+        moves.push( square );
         return true;
     }
     else if (piece.white != pieceOnSquare.white) {
-        moves.push({ x: square.x, y: square.y });
+        moves.push( square );
         return true;
     }
     return false;
