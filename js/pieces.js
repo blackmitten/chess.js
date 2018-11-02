@@ -58,7 +58,7 @@ function Pawn(x, y, white) {
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x - 1, y: this.y + 1 });
                 }
-                pieceToTake = board.getPieceOnSquare({x:this.x - 1, y:this.y + 1});
+                pieceToTake = board.getPieceOnSquare({x:this.x + 1, y:this.y + 1});
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
                     moves.push({ x: this.x + 1, y: this.y + 1 });
                 }
