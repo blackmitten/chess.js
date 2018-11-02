@@ -83,27 +83,27 @@ function Rook(x, y, white) {
     this.getLegalMoves = function (board) {
         var moves = [];
         for (var x = this.x + 1; x <= 7; x++) {
-            addMoveIfOk(board, moves, {x:x, y:this.y});
+            addMoveIfOk(this, board, moves, {x:x, y:this.y});
         }
         for (x = this.x - 1; x >= 0; x--) {
-            addMoveIfOk(board, moves, {x:x, y:this.y});
+            addMoveIfOk(this, board, moves, {x:x, y:this.y});
         }
         for (var y = this.y + 1; y <= 7; y++) {
-            addMoveIfOk(board, moves, {x:this.x, y:y});
+            addMoveIfOk(this, board, moves, {x:this.x, y:y});
         }
         for (y = this.y - 1; y >= 0; y--) {
-            addMoveIfOk(board, moves, {x:this.x, y:y});
+            addMoveIfOk(this, board, moves, {x:this.x, y:y});
         }
         return moves;
     };
 }
 
-function addMoveIfOk(board, moves, square) {
+function addMoveIfOk(piece, board, moves, square) {
     var pieceOnSquare = board.getPieceOnSquare(square);
     if ( pieceOnSquare == undefined ) {
         moves.push({ x: square.x, y: square.y });
     }
-    else if ( this.white != pieceOnSquare.white ){
+    else if ( piece.white != pieceOnSquare.white ){
         moves.push({ x: square.x, y: square.y });
     }
 } 
