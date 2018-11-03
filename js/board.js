@@ -1,9 +1,22 @@
 import * as Pieces from "./pieces.js";
 
+export {Square};
 export {Board};
 
 "use strict";
 
+function Square(x, y){
+    this.x = x;
+    this.y = y;
+    
+    this.equals = function( square ){
+        return this.x==square.x&&this.y==square.y;
+    };
+
+    this.offset = function( dx, dy ){
+        return new Square(this.x+dx,this.y+dy);
+    }
+}
 
 function Board() {
 
@@ -13,26 +26,26 @@ function Board() {
 
     this.initNewGame = function () {
         for (var p = 0; p < 8; p++) {
-            this.blackPieces.push(new Pieces.Pawn(p, 1, false));
-            this.whitePieces.push(new Pieces.Pawn(p, 6, true));
+            this.blackPieces.push(new Pieces.Pawn(new Square(p, 1), false));
+            this.whitePieces.push(new Pieces.Pawn(new Square(p, 6), true));
         }
-        this.blackPieces.push(new Pieces.Rook(0, 0, false));
-        this.blackPieces.push(new Pieces.Rook(7, 0, false));
-        this.blackPieces.push(new Pieces.Knight(1, 0, false));
-        this.blackPieces.push(new Pieces.Knight(6, 0, false));
-        this.blackPieces.push(new Pieces.Bishop(2, 0, false));
-        this.blackPieces.push(new Pieces.Bishop(5, 0, false));
-        this.blackPieces.push(new Pieces.Queen(3, 0, false));
-        this.blackPieces.push(new Pieces.King(4, 0, false));
+        this.blackPieces.push(new Pieces.Rook(new Square(0, 0), false));
+        this.blackPieces.push(new Pieces.Rook(new Square(7, 0), false));
+        this.blackPieces.push(new Pieces.Knight(new Square(1, 0), false));
+        this.blackPieces.push(new Pieces.Knight(new Square(6, 0), false));
+        this.blackPieces.push(new Pieces.Bishop(new Square(2, 0), false));
+        this.blackPieces.push(new Pieces.Bishop(new Square(5, 0), false));
+        this.blackPieces.push(new Pieces.Queen(new Square(3, 0), false));
+        this.blackPieces.push(new Pieces.King(new Square(4, 0), false));
 
-        this.whitePieces.push(new Pieces.Rook(0, 7, true));
-        this.whitePieces.push(new Pieces.Rook(7, 7, true));
-        this.whitePieces.push(new Pieces.Knight(1, 7, true));
-        this.whitePieces.push(new Pieces.Knight(6, 7, true));
-        this.whitePieces.push(new Pieces.Bishop(2, 7, true));
-        this.whitePieces.push(new Pieces.Bishop(5, 7, true));
-        this.whitePieces.push(new Pieces.Queen(3, 7, true));
-        this.whitePieces.push(new Pieces.King(4, 7, true));
+        this.whitePieces.push(new Pieces.Rook(new Square(0, 7), true));
+        this.whitePieces.push(new Pieces.Rook(new Square(7, 7), true));
+        this.whitePieces.push(new Pieces.Knight(new Square(1, 7), true));
+        this.whitePieces.push(new Pieces.Knight(new Square(6, 7), true));
+        this.whitePieces.push(new Pieces.Bishop(new Square(2, 7), true));
+        this.whitePieces.push(new Pieces.Bishop(new Square(5, 7), true));
+        this.whitePieces.push(new Pieces.Queen(new Square(3, 7), true));
+        this.whitePieces.push(new Pieces.King(new Square(4, 7), true));
     };
 
     this.movePiece = function (piece, destinationSquare) {
@@ -46,23 +59,22 @@ function Board() {
                 throw "tried to move to a square occupied by a piece on our own side";
             }
         }
-        var pieceCopy = board.getPieceOnSquare({ x: piece.x, y: piece.y });
+        var pieceCopy = board.getPieceOnSquare(piece.square);
 
-        pieceCopy.x = destinationSquare.x;
-        pieceCopy.y = destinationSquare.y;
+        pieceCopy.square = destinationSquare;
         board.whitesTurn = !board.whitesTurn;
         return board;
     };
 
     this.removePieceOnSquare = function (square) {
         for (var i = 0; i < this.blackPieces.length; i++) {
-            if (square.x == this.blackPieces[i].x && square.y == this.blackPieces[i].y) {
+            if (square.equals( this.blackPieces[i].square) ) {
                 this.blackPieces.splice(i, 1);
                 break;
             }
         }
         for (i = 0; i < this.whitePieces.length; i++) {
-            if (square.x == this.whitePieces[i].x && square.y == this.whitePieces[i].y) {
+            if (square.equals( this.whitePieces[i].square) ) {
                 this.whitePieces.splice(i, 1);
                 break;
             }
@@ -84,13 +96,13 @@ function Board() {
     this.getPieceOnSquare = function (square) {
         var piece = undefined;
         for (var i = 0; i < this.blackPieces.length; i++) {
-            if (this.blackPieces[i].x == square.x && this.blackPieces[i].y == square.y) {
+            if (this.blackPieces[i].square.equals( square )) {
                 piece = this.blackPieces[i];
                 break;
             }
         }
         for (i = 0; i < this.whitePieces.length; i++) {
-            if (this.whitePieces[i].x == square.x && this.whitePieces[i].y == square.y) {
+            if (this.whitePieces[i].square.equals(square)) {
                 piece = this.whitePieces[i];
                 break;
             }

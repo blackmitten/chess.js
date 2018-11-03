@@ -114,7 +114,7 @@ function drawPawn(ctx, width) {
 
 function drawPiecePreamble(ctx, piece, width) {
     ctx.fillStyle = piece.white ? "#fff" : "#000";
-    var x = piece.x * width + width / 2;
-    var y = piece.y * width + width / 2;
+    var x = piece.square.x * width + width / 2;
+    var y = piece.square.y * width + width / 2;
     return { x:x, y:y };
 }

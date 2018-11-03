@@ -1,4 +1,5 @@
 import {Board} from "./board.js";
+import {Square} from "./board.js";
 import * as Drawing from "./drawing.js";
 
 "use strict";
@@ -6,7 +7,7 @@ import * as Drawing from "./drawing.js";
 
 var board;
 var selectedPiece;
-var selectedSquare = { x: -1, y: -1 };
+var selectedSquare = new Square( -1, -1 );
 var highlightedSquares = [];
 
 export {selectedSquare};
@@ -27,12 +28,11 @@ function onBoardClicked(eventInfo) {
     var width = c.clientWidth / 8;
     var x = Math.floor(eventInfo.offsetX / width);
     var y = Math.floor(eventInfo.offsetY / width);
-    onSquareClicked({ x: x, y: y });
+    onSquareClicked(new Square( x, y));
 }
 
 function onSquareClicked(clickedSquare) {
-    selectedSquare.x = -1;
-    selectedSquare.y = -1;
+    selectedSquare= new Square( -1, -1 );
     highlightedSquares = [];
     var clickedPiece = board.getPieceOnSquare(clickedSquare);
 
@@ -40,8 +40,7 @@ function onSquareClicked(clickedSquare) {
         if (clickedPiece != undefined) {
             if (clickedPiece.white == board.whitesTurn) {
                 selectedPiece = clickedPiece;
-                selectedSquare.x = clickedSquare.x;
-                selectedSquare.y = clickedSquare.y;
+                selectedSquare = clickedSquare;
                 console.log("clicked on " + clickedSquare.x + ", " + clickedSquare.y + ": " +
                     (selectedPiece != undefined ? ((selectedPiece.white ? "white " : "black ") + selectedPiece.name) : "empty"));
 
@@ -69,7 +68,7 @@ function onSquareClicked(clickedSquare) {
 
 function checkArrayForSquare(square, squares) {
     for (var i = 0; i < squares.length; i++) {
-        if (square.x == squares[i].x && square.y == squares[i].y) {
+        if (square.equals(squares[i])) {
             return true;
         }
     }

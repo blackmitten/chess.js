@@ -1,4 +1,5 @@
 import * as Drawing from "./drawing.js";
+import { Square } from "./board.js";
 
 "use strict";
 
@@ -10,57 +11,56 @@ export { Queen };
 export { King };
 
 
-function Pawn(x, y, white) {
-    this.x = x;
-    this.y = y;
+function Pawn(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawPawn;
     this.name = "pawn";
 
     this.copy = function () {
-        return new Pawn(this.x, this.y, this.white);
+        return new Pawn(this.square, this.white);
     };
 
     this.getLegalMoves = function (board) {
         var moves = [];
         var pieceToTake;
         if (this.white) {
-            if (this.y > 0) {
-                if (board.getPieceOnSquare({ x: this.x, y: this.y - 1 }) == undefined) {
-                    moves.push({ x: this.x, y: this.y - 1 });
-                    if (this.y == 6) {
-                        if (board.getPieceOnSquare({ x: this.x, y: this.y - 2 }) == undefined) {
-                            moves.push({ x: this.x, y: this.y - 2 });
+            if (this.square.y > 0) {
+                if (board.getPieceOnSquare(this.square.offset(0,-1)) == undefined) {
+                    moves.push(this.square.offset(0,-1));
+                    if (this.square.y == 6) {
+                        if (board.getPieceOnSquare(this.square.offset(0,-2)) == undefined) {
+                            moves.push(this.square.offset(0,-2));
                         }
                     }
                 }
-                pieceToTake = board.getPieceOnSquare({ x: this.x - 1, y: this.y - 1 });
+                pieceToTake = board.getPieceOnSquare(this.square.offset(-1,-1));
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
-                    moves.push({ x: this.x - 1, y: this.y - 1 });
+                    moves.push(this.square.offset(-1,-1));
                 }
-                pieceToTake = board.getPieceOnSquare({ x: this.x + 1, y: this.y - 1 });
+                pieceToTake = board.getPieceOnSquare(this.square.offset(1,-1));
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
-                    moves.push({ x: this.x + 1, y: this.y - 1 });
+                    moves.push(this.square.offset(1,-1));
                 }
             }
         }
         else {
-            if (this.y < 7) {
-                if (board.getPieceOnSquare({ x: this.x, y: this.y + 1 }) == undefined) {
-                    moves.push({ x: this.x, y: this.y + 1 });
-                    if (this.y == 1) {
-                        if (board.getPieceOnSquare({ x: this.x, y: this.y + 2 }) == undefined) {
-                            moves.push({ x: this.x, y: this.y + 2 });
+            if (this.square.y < 7) {
+                if (board.getPieceOnSquare(this.square.offset(0,1)) == undefined) {
+                    moves.push(this.square.offset(0,1));
+                    if (this.square.y == 1) {
+                        if (board.getPieceOnSquare(this.square.offset(0,2)) == undefined) {
+                            moves.push(this.square.offset(0,2));
                         }
                     }
                 }
-                pieceToTake = board.getPieceOnSquare({ x: this.x - 1, y: this.y + 1 });
+                pieceToTake = board.getPieceOnSquare(this.square.offset(-1,1));
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
-                    moves.push({ x: this.x - 1, y: this.y + 1 });
+                    moves.push(this.square.offset(-1,1));
                 }
-                pieceToTake = board.getPieceOnSquare({ x: this.x + 1, y: this.y + 1 });
+                pieceToTake = board.getPieceOnSquare(this.square.offset(1,1));
                 if (pieceToTake != undefined && pieceToTake.white != this.white) {
-                    moves.push({ x: this.x + 1, y: this.y + 1 });
+                    moves.push(this.square.offset(1,1));
                 }
             }
         }
@@ -69,31 +69,30 @@ function Pawn(x, y, white) {
 
 }
 
-function Rook(x, y, white) {
-    this.x = x;
-    this.y = y;
+function Rook(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawRook;
     this.name = "rook";
 
     this.copy = function () {
-        return new Rook(this.x, this.y, this.white);
+        return new Rook(this.square, this.white);
     };
 
     this.getLegalMoves = function (board) {
         var moves = [];
-        var x=this.x;
-        var y=this.y;
-        while(addMoveIfOk(this, board, moves, {x: ++x, y: y }));
-        x=this.x;
-        y=this.y;
-        while(addMoveIfOk(this, board, moves, {x: --x, y: y }));
-        x=this.x;
-        y=this.y;
-        while(addMoveIfOk(this, board, moves, {x: x, y: ++y }));
-        x=this.x;
-        y=this.y;
-        while(addMoveIfOk(this, board, moves, {x: x, y: --y }));
+        var x=this.square.x;
+        var y=this.square.y;
+        while(addMoveIfOk(this, board, moves, new Square( ++x, y )));
+        x=this.square.x;
+        y=this.square.y;
+        while(addMoveIfOk(this, board, moves, new Square( --x, y )));
+        x=this.square.x;
+        y=this.square.y;
+        while(addMoveIfOk(this, board, moves, new Square( x, ++y )));
+        x=this.square.x;
+        y=this.square.y;
+        while(addMoveIfOk(this, board, moves, new Square( x, --y )));
 
         return moves;
     };
@@ -115,15 +114,14 @@ function addMoveIfOk(piece, board, moves, square) {
     return false;
 }
 
-function Knight(x, y, white) {
-    this.x = x;
-    this.y = y;
+function Knight(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawKnight;
     this.name = "Knight";
 
     this.copy = function () {
-        return new Knight(this.x, this.y, this.white);
+        return new Knight(this.square, this.white);
     };
 
     this.getLegalMoves = function (board) {
@@ -132,14 +130,13 @@ function Knight(x, y, white) {
 
 }
 
-function Bishop(x, y, white) {
-    this.x = x;
-    this.y = y;
+function Bishop(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawBishop;
     this.name = "Bishop";
     this.copy = function () {
-        return new Bishop(this.x, this.y, this.white);
+        return new Bishop(this.square, this.white);
     };
     this.getLegalMoves = function (board) {
         return [];
@@ -147,15 +144,14 @@ function Bishop(x, y, white) {
 
 }
 
-function Queen(x, y, white) {
-    this.x = x;
-    this.y = y;
+function Queen(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawQueen;
     this.name = "Queen";
 
     this.copy = function () {
-        return new Queen(this.x, this.y, this.white);
+        return new Queen(this.square, this.white);
     };
 
     this.getLegalMoves = function (board) {
@@ -163,15 +159,14 @@ function Queen(x, y, white) {
     };
 }
 
-function King(x, y, white) {
-    this.x = x;
-    this.y = y;
+function King(square, white) {
+    this.square = square;
     this.white = white;
     this.draw = Drawing.drawKing;
     this.name = "King";
 
     this.copy = function () {
-        return new King(this.x, this.y, this.white);
+        return new King(this.square, this.white);
     };
 
     this.getLegalMoves = function (board) {
