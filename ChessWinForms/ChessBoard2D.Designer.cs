@@ -36,6 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "ChessBoard2D";
             this.Size = new System.Drawing.Size(460, 431);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ChessBoard2D_Paint);
             this.ResumeLayout(false);
 
         }
