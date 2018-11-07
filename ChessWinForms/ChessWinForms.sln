@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessWinForms", "ChessWinForms.csproj", "{2149929C-9217-44AA-BFFE-182066C69433}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessDotNetBackend", "..\ChessDotNetBackend\ChessDotNetBackend.csproj", "{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2149929C-9217-44AA-BFFE-182066C69433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2149929C-9217-44AA-BFFE-182066C69433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2149929C-9217-44AA-BFFE-182066C69433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2149929C-9217-44AA-BFFE-182066C69433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8177908-E1C1-4236-A3AB-8545BFFBA9CD}
+	EndGlobalSection
+EndGlobal
