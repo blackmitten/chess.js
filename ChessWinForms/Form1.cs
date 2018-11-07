@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessDotNetBackend;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,10 @@ namespace ChessWinForms
         public Form1()
         {
             InitializeComponent();
+
+            Board board = new Board();
+            board.InitNewGame();
+            this.chessBoard2D1.Board = board;
         }
     }
 }

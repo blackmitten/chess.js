@@ -88,5 +88,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChessDotNetBackend\ChessDotNetBackend.csproj">
+      <Project>{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}</Project>
+      <Name>ChessDotNetBackend</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
