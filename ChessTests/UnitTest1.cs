@@ -51,16 +51,19 @@ namespace ChessTests
             {
                 for (int y = 0; y < 2; y++)
                 {
+                    // black pieces at top
                     IPiece piece = board.GetPieceOnSquare(new Square(x, y));
                     Assert.IsTrue(!piece.White);
                 }
                 for (int y = 6; y < 8; y++)
                 {
+                    // empty in the middle
                     IPiece piece = board.GetPieceOnSquare(new Square(x, y));
                     Assert.IsTrue(piece.White);
                 }
                 for (int y = 2; y < 6; y++)
                 {
+                    // white pieces at bottom
                     IPiece piece = board.GetPieceOnSquare(new Square(x, y));
                     Assert.IsNull(piece);
                 }

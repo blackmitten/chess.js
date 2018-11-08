@@ -33,7 +33,7 @@ namespace ChessDotNetBackend
             {
                 return true;
             }
-            if(square.InBounds && piece.IsMoveValid(board,square))
+            if (square.InBounds && piece.IsMoveValid(board, square))
             {
                 moves.Add(square);
                 return true;
@@ -63,7 +63,7 @@ namespace ChessDotNetBackend
         public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
-            var dir = this.White ? -1 : 1;
+            var dir = White ? -1 : 1;
             Piece.addMove(this, board, moves, Square.Offset(0, dir * 1));
             return moves;
         }
