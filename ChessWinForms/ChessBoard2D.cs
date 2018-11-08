@@ -16,11 +16,13 @@ namespace ChessWinForms
         private int m_width = 400;
         private Brush m_darkBrush;
         private Brush m_lightBrush;
+        private Pen m_selectionPen = new Pen(Color.Red, 3);
         private Board m_board;
         private Brush m_whiteBrush = new SolidBrush(Color.White);
         private Brush m_blackBrush = new SolidBrush(Color.Black);
+        private Square m_selectedSquare = new Square(-1, -1);
 
-
+        private int SquareWidth => m_width / 8;
 
         public ChessBoard2D()
         {
@@ -67,8 +69,14 @@ namespace ChessWinForms
                 {
                     piece.Accept(this, e.Graphics);
                 }
+                if (m_selectedSquare.InBounds)
+                {
+                    e.Graphics.DrawRectangle(m_selectionPen, m_selectedSquare.x * SquareWidth, m_selectedSquare.y * SquareWidth, SquareWidth, SquareWidth);
+                }
             }
         }
+
+        #region piece drawing
 
         public void Visit(Pawn piece, object data)
         {
@@ -145,6 +153,29 @@ namespace ChessWinForms
             brush = piece.White ? m_whiteBrush : m_blackBrush;
             pt = new Point(piece.Square.x * squareWidth + squareWidth / 2, piece.Square.y * squareWidth + squareWidth / 2);
 
+        }
+
+        #endregion
+
+
+        private void ChessBoard2D_MouseClick(object sender, MouseEventArgs e)
+        {
+            double squareWidth = m_width / 8;
+            int x = (int)Math.Floor(e.X / squareWidth);
+            int y = (int)Math.Floor(e.Y / squareWidth);
+            SquareClicked(new Square(x, y));
+        }
+
+        private void SquareClicked(Square square)
+        {
+            Console.WriteLine("Clicked " + square);
+            m_selectedSquare = square;
+            IPiece clickedPiece = m_board.GetPieceOnSquare(square);
+            if (clickedPiece != null)
+            {
+                clickedPiece.GetAllMoves(m_board);
+            }
+            Invalidate();
         }
     }
 }

@@ -17,8 +17,7 @@ namespace ChessWinForms
         {
             InitializeComponent();
 
-            Board board = new Board();
-            board.InitNewGame();
+            Board board = Board.InitNewGame();
             this.chessBoard2D1.Board = board;
         }
     }

@@ -9,6 +9,8 @@ namespace ChessDotNetBackend
         public int x;
         public int y;
 
+        public bool InBounds => x >= 0 && x <= 7 && y >= 0 && y <= 7;
+
         public Square(int x, int y)
         {
             this.x = x;
@@ -38,6 +40,11 @@ namespace ChessDotNetBackend
         public Square Offset(int dx, int dy)
         {
             return new Square(x + dx, y + dy);
+        }
+
+        public override string ToString()
+        {
+            return x + ", " + y;
         }
     }
 }

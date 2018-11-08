@@ -43,5 +43,29 @@ namespace ChessTests
             Assert.AreNotSame(s1, s2);
         }
 
+        [TestMethod]
+        public void TestInitBoard()
+        {
+            Board board = Board.InitNewGame();
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 2; y++)
+                {
+                    IPiece piece = board.GetPieceOnSquare(new Square(x, y));
+                    Assert.IsTrue(!piece.White);
+                }
+                for (int y = 6; y < 8; y++)
+                {
+                    IPiece piece = board.GetPieceOnSquare(new Square(x, y));
+                    Assert.IsTrue(piece.White);
+                }
+                for (int y = 2; y < 6; y++)
+                {
+                    IPiece piece = board.GetPieceOnSquare(new Square(x, y));
+                    Assert.IsNull(piece);
+                }
+            }
+        }
+
     }
 }

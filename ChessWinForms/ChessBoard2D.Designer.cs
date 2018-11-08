@@ -37,6 +37,7 @@
             this.Name = "ChessBoard2D";
             this.Size = new System.Drawing.Size(460, 431);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ChessBoard2D_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ChessBoard2D_MouseClick);
             this.ResumeLayout(false);
 
         }
