@@ -1,0 +1,335 @@
+//Microsoft App Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#ifdef APSTUDIO_INVOKED
+//////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""res\\chess.rc2""  // non-App Studio edited resources\r\n"
+    "\r\n"
+    "#include ""afxres.rc""  // Standard components\r\n"
+    "\0"
+END
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // APSTUDIO_INVOKED
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+IDR_MAINFRAME           ICON    DISCARDABLE     "RES\\CHESS.ICO"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "RES\\TOOLBAR.BMP"
+IDB_WPAWN               BITMAP  DISCARDABLE     "RES\\BITMAP1.BMP"
+IDB_WROOK               BITMAP  DISCARDABLE     "RES\\BITMAP2.BMP"
+IDB_WKNIGHT             BITMAP  DISCARDABLE     "RES\\BITMAP3.BMP"
+IDB_WBISHOP             BITMAP  DISCARDABLE     "RES\\BITMAP4.BMP"
+IDB_WQUEEN              BITMAP  DISCARDABLE     "RES\\BITMAP5.BMP"
+IDB_WKING               BITMAP  DISCARDABLE     "RES\\BITMAP6.BMP"
+IDB_BBISHOP             BITMAP  DISCARDABLE     "RES\\WBISHOP1.BMP"
+IDB_BKING               BITMAP  DISCARDABLE     "RES\\WKING1.BMP"
+IDB_BKNIGHT             BITMAP  DISCARDABLE     "RES\\BKNIGHT.BMP"
+IDB_BPAWN               BITMAP  DISCARDABLE     "RES\\WPAWN1.BMP"
+IDB_BQUEEN              BITMAP  DISCARDABLE     "RES\\BQUEEN.BMP"
+IDB_BROOK               BITMAP  DISCARDABLE     "RES\\BROOK.BMP"
+IDB_MPAWN               BITMAP  DISCARDABLE     "RES\\MPAWN.BMP"
+IDB_MBISHOP             BITMAP  DISCARDABLE     "RES\\MBISHOP.BMP"
+IDB_MKING               BITMAP  DISCARDABLE     "RES\\MKING.BMP"
+IDB_MKNIGHT             BITMAP  DISCARDABLE     "RES\\MKNIGHT.BMP"
+IDB_MQUEEN              BITMAP  DISCARDABLE     "RES\\MQUEEN.BMP"
+IDB_MROOK               BITMAP  DISCARDABLE     "RES\\MROOK.BMP"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&Game"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Restore saved\tCtrl+R",      ID_GAME_RESTORESAVED
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Move"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_MOVE_UNDO
+        MENUITEM "&Force",                      ID_LEVEL_FORCEMOVE
+    END
+    POPUP "&Level"
+    BEGIN
+        MENUITEM "Depth &1",                    ID_LEVEL_DEPTH1
+        MENUITEM "Depth &2",                    ID_LEVEL_DEPTH2
+        MENUITEM "Depth &3",                    ID_LEVEL_DEPTH3
+        MENUITEM "Depth &4",                    ID_LEVEL_DEPTH4
+        MENUITEM "Depth &5",                    ID_LEVEL_DEPTH5
+        MENUITEM "Depth &6",                    ID_LEVEL_DEPTH6
+    END
+    POPUP "&Algorithm"
+    BEGIN
+        MENUITEM "&Minimax",                    ID_ALGORITHM_MINIMAX
+        MENUITEM "Minimax with &alpha-beta",    ID_ALGORITHM_MINIMAXWITHALPHABETA
+
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Refresh\tF5",                ID_VIEW_REFRESH
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM SEPARATOR
+        MENUITEM "&Game statistics",            ID_VIEW_GAMESTATISTICS
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About Chess...",             ID_APP_ABOUT
+    END
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY,CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY,CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY,CONTROL, NOINVERT
+    "R",            ID_GAME_RESTORESAVED,   VIRTKEY,CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY,CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY,CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY,ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY,SHIFT, NOINVERT
+    VK_DOWN,        ID_DOWN,                VIRTKEY,NOINVERT
+    VK_F2,          ID_HACK_SHOWALLMOVES,   VIRTKEY,NOINVERT
+    VK_F5,          ID_VIEW_REFRESH,        VIRTKEY,NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY,NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY,SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY,CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY,SHIFT, NOINVERT
+    VK_LEFT,        ID_LEFT,                VIRTKEY,NOINVERT
+    VK_RIGHT,       ID_RIGHT,               VIRTKEY,NOINVERT
+    VK_SPACE,       ID_SPACEBAR,            VIRTKEY,NOINVERT
+    VK_UP,          ID_UP,                  VIRTKEY,NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY,CONTROL, NOINVERT
+    "Z",            ID_MOVE_UNDO,           VIRTKEY,CONTROL, NOINVERT
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  34, 22, 181, 106
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Chess"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Chess Version 1.0",IDC_STATIC,57,15,66,8
+    CTEXT           "Copyright \251 1996, 1997",IDC_STATIC,31,92,119,8
+    DEFPUSHBUTTON   "OK",IDOK,135,12,22,14,WS_GROUP
+    CTEXT           "C. S. Page, C. A. Crabtree",IDC_STATIC,31,42,120,8
+    CTEXT           "ECS Third year project",IDC_STATIC,31,68,120,8
+    CTEXT           "Keble College",IDC_STATIC,31,52,120,8
+    GROUPBOX        "",IDC_STATIC,23,33,135,51
+    ICON            IDR_MAINFRAME,IDC_STATIC,24,9,18,20
+END
+
+IDD_POSITION_STATS DIALOG DISCARDABLE  100, 50, 187, 126
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Position statistics"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,127,103,50,14
+    EDITTEXT        IDC_EDIT_GAMESTATS,7,6,170,85,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL
+    LTEXT           "Black's score",IDC_STATIC,7,106,45,8
+    EDITTEXT        IDC_BLACK_SCORE,71,103,40,13,ES_AUTOHSCROLL | 
+                    ES_READONLY
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "Chess\nunsaved game\nCHESS Document\nsaved games (*.gam)\n.gam\nChess game\nChess game"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "Chess by Charlie & Carl"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+    ID_YOUR_MOVE            "Your move"
+    ID_THINKING             "Thinking..."
+    ID_CHECK_YOU            "You are in check"
+    ID_BLACKMATE            "Black wins"
+    ID_CHECK_ME             "I am in check"
+    ID_CHECK_STATUS         "You are in check..."
+    ID_WHITEMATE            "White wins"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+    ID_STARTPOS             "CATS"
+    ID_ENDPOS               "CATS"
+    ID_MESSAGE_BAR          "Fishes"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Start a new game"
+    ID_FILE_OPEN            "Load a previously saved game"
+    ID_FILE_CLOSE           "End game"
+    ID_FILE_SAVE            "Save this game to disk"
+    ID_FILE_SAVE_AS         "Save game with a new name"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright"
+    ID_APP_EXIT             "Quit the program"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Load this game"
+    ID_FILE_MRU_FILE2       "Load this game"
+    ID_FILE_MRU_FILE3       "Load this game"
+    ID_FILE_MRU_FILE4       "Load this game"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane"
+    ID_PREV_PANE            "Switch back to the previous window pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection"
+    ID_EDIT_CLEAR_ALL       "Erase everything"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard"
+    ID_EDIT_FIND            "Find the specified text"
+    ID_EDIT_PASTE           "Insert Clipboard contents"
+    ID_EDIT_REPEAT          "Repeat the last action"
+    ID_EDIT_REPLACE         "Replace specific text with different text"
+    ID_EDIT_SELECT_ALL      "Select the entire document"
+    ID_EDIT_UNDO            "Undo the last move"
+    ID_EDIT_REDO            "Redo the previously undone action"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_REFRESH         "Redraw the board"
+    ID_MOVE_SELECTPIECE     "Select the piece to move"
+    ID_HACK_SHOWALLMOVES    "Show all valid moves for this piece"
+    ID_HACK_THREATENED      "Is this piece threatened?"
+    ID_VIEW_GAMESTATISTICS  "Show information about the current position"
+    ID_GAME_RESTORESAVED    "Restores the game to the position it was last saved"
+    ID_LEVEL_DEPTH1         "Set look ahead to this depth"
+    ID_LEVEL_DEPTH2         "Set look ahead to this depth"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_LEVEL_DEPTH3         "Set look ahead to this depth"
+    ID_LEVEL_DEPTH4         "Set look ahead to this depth"
+    ID_LEVEL_DEPTH5         "Set look ahead to this depth"
+    ID_LEVEL_DEPTH6         "Set look ahead to this depth"
+    ID_ALGORITHM_MINIMAX    "Use the basic minimax algorithm (slow)"
+    ID_ALGORITHM_MINIMAXWITHALPHABETA 
+                            "Use the improved alpha-beta algorithm (faster)"
+    ID_LEVEL_FORCEMOVE      "Interrupt computer and force best move found so far"
+    ID_MOVE_UNDO            "Undo the last move"
+END
+
+
+#ifndef APSTUDIO_INVOKED
+////////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\chess.rc2"  // non-App Studio edited resources
+
+#include "afxres.rc"  // Standard components
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
