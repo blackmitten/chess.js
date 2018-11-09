@@ -17,10 +17,12 @@ namespace ChessWinForms
         private Brush m_darkBrush;
         private Brush m_lightBrush;
         private Pen m_selectionPen = new Pen(Color.Red, 3);
+        private Pen m_highlightPen = new Pen(Color.White, 2);
         private Board m_board;
         private Brush m_whiteBrush = new SolidBrush(Color.White);
         private Brush m_blackBrush = new SolidBrush(Color.Black);
         private Square m_selectedSquare = new Square(-1, -1);
+        private List<Square> m_highlightedSquares = new List<Square>();
 
         private int SquareWidth => m_width / 8;
 
@@ -72,6 +74,10 @@ namespace ChessWinForms
                 if (m_selectedSquare.InBounds)
                 {
                     e.Graphics.DrawRectangle(m_selectionPen, m_selectedSquare.x * SquareWidth, m_selectedSquare.y * SquareWidth, SquareWidth, SquareWidth);
+                }
+                foreach(var square in m_highlightedSquares)
+                {
+                    e.Graphics.DrawRectangle(m_highlightPen, square.x * SquareWidth, square.y * SquareWidth, SquareWidth, SquareWidth);
                 }
             }
         }
@@ -173,7 +179,8 @@ namespace ChessWinForms
             IPiece clickedPiece = m_board.GetPieceOnSquare(square);
             if (clickedPiece != null)
             {
-                clickedPiece.GetAllMoves(m_board);
+                m_highlightedSquares.Clear();
+                m_highlightedSquares.AddRange(clickedPiece.GetAllMoves(m_board));
             }
             Invalidate();
         }

@@ -25,7 +25,7 @@ namespace ChessDotNetBackend
         bool IsMoveValid(Board board, Square square);
     }
 
-    internal class Piece
+    static class Piece
     {
         public static bool addMove(IPiece piece, Board board, List<Square> moves, Square square)
         {
@@ -33,13 +33,25 @@ namespace ChessDotNetBackend
             {
                 return true;
             }
-            if (square.InBounds && piece.IsMoveValid(board, square))
+            if (piece.IsMoveValid(board, square))
             {
                 moves.Add(square);
                 return true;
             }
             return false;
         }
+
+        public static bool IsMoveValid(IPiece piece, Board board, Square square)
+        {
+            if (!square.InBounds)
+            {
+                return false;
+            }
+            IPiece capturedPiece = board.GetPieceOnSquare(square);
+            bool correctCapture = capturedPiece == null || capturedPiece.White != piece.White;
+            return correctCapture;
+        }
+
     }
 
     public class Pawn : IPiece
@@ -65,16 +77,44 @@ namespace ChessDotNetBackend
             var moves = new List<Square>();
             var dir = White ? -1 : 1;
             Piece.addMove(this, board, moves, Square.Offset(0, dir * 1));
+            Piece.addMove(this, board, moves, Square.Offset(0, dir * 2));
+            Piece.addMove(this, board, moves, Square.Offset(1, dir * 1));
+            Piece.addMove(this, board, moves, Square.Offset(-1, dir * 1));
             return moves;
         }
 
         public bool IsMoveValid(Board board, Square square)
         {
-            return true;
+            if (!Piece.IsMoveValid(this, board, square))
+            {
+                return false;
+            }
+            int nDir = White ? -1 : 1;  // which way can this pawn move?
+            if ((square.y - Square.y) * nDir > 2)   // can never go further than two spaces
+                return false;
+            if ((square.y - Square.y) * nDir <= 0)  // mustn't go backwards
+                return false;
+            if (((square.y - Square.y) * nDir > 1) && (Square.y != (White ? 6 : 1)))  // can go two spaces if we haven't moved
+                return false;
+            if ((square.x == Square.x) && board.GetPieceOnSquare(square) != null)  // can't take forwards
+                return false;
+            if (square.x != Square.x)
+            {
+                if (board.GetPieceOnSquare(square) == null)
+                {
+                    return false;
+                }
+                if (Math.Abs(square.x - Square.x) > 1)  // can take diagonally
+                {
+                    return false;
+                }
+            }
+            return board.IsNothingInTheWay(this, square);
+
         }
 
+        public override string ToString() => Name + " " + Square.ToString();
     }
-
 
     public class Rook : IPiece
     {
@@ -103,6 +143,8 @@ namespace ChessDotNetBackend
         {
             return true;
         }
+
+        public override string ToString() => Name + " " + Square.ToString();
     }
 
     public class Knight : IPiece
@@ -132,6 +174,8 @@ namespace ChessDotNetBackend
         {
             return true;
         }
+
+        public override string ToString() => Name + " " + Square.ToString();
     }
 
     public class Bishop : IPiece
@@ -161,6 +205,8 @@ namespace ChessDotNetBackend
         {
             return true;
         }
+
+        public override string ToString() => Name + " " + Square.ToString();
     }
 
     public class Queen : IPiece
@@ -190,6 +236,8 @@ namespace ChessDotNetBackend
         {
             return true;
         }
+
+        public override string ToString() => Name + " " + Square.ToString();
     }
 
     public class King : IPiece
@@ -219,6 +267,8 @@ namespace ChessDotNetBackend
         {
             return true;
         }
+
+        public override string ToString() => Name + " " + Square.ToString();
     }
 
 }

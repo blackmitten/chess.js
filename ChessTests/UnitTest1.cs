@@ -70,5 +70,34 @@ namespace ChessTests
             }
         }
 
+        [TestMethod]
+        public void TestPawnMove()
+        {
+            Board board = Board.InitNewGame();
+            IPiece pawn = board.GetPieceOnSquare(new Square(4, 6));
+            Assert.IsTrue(pawn.IsMoveValid(board, new Square(4, 5)));
+            Assert.IsTrue(pawn.IsMoveValid(board, new Square(4, 4)));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 3)));
+            board.Pieces.Add(new Pawn(new Square(4, 5), false));
+            board.Pieces.Add(new Pawn(new Square(3, 5), true));
+            board.Pieces.Add(new Pawn(new Square(5, 5), true));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 5)));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 4)));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(3, 5)));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(5, 5)));
+
+            pawn = board.GetPieceOnSquare(new Square(1, 1));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(0, 2)));
+            Assert.IsTrue(pawn.IsMoveValid(board, new Square(1, 2)));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(2, 2)));
+            board.Pieces.Add(new Pawn(new Square(0, 2), false));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(0, 2)));
+            board.Pieces.Add(new Pawn(new Square(1, 2), true));
+            Assert.IsFalse(pawn.IsMoveValid(board, new Square(1, 2)));
+            board.Pieces.Add(new Pawn(new Square(2, 2), true));
+            Assert.IsTrue(pawn.IsMoveValid(board, new Square(2, 2)));
+        }
+
+
     }
 }

@@ -50,5 +50,40 @@ namespace ChessDotNetBackend
             }
             return null;
         }
+
+        /// <summary>
+        /// Walk the piece up to the given square and see if anyone gets in the way
+        /// </summary>
+        /// <param name="piece"></param>
+        /// <param name="square"></param>
+        /// <returns></returns>
+        public bool IsNothingInTheWay(IPiece piece, Square square)
+        {
+            int dx = piece.Square.x - square.x;
+            int dy = piece.Square.y - square.y;
+            int xinc = (dx == 0) ? 0 : ((dx < 0) ? 1 : -1);  // ie. either no horizontal move or left / right
+            int yinc = (dy == 0) ? 0 : ((dy < 0) ? 1 : -1);  // ie. either no vertical move or up / down
+
+            if (xinc == 0 && yinc == 0)
+            {
+                throw new InvalidOperationException();  // if this happens, we're stuffed - it shouldn't ever happen
+            }
+
+            Square s = piece.Square;
+            for (; ; )
+            {
+                s = s.Offset(xinc, yinc);
+                if (square == s)
+                {
+                    return true;
+                }
+                if (GetPieceOnSquare(s) != null)
+                {
+                    return false;
+                }
+            }
+        }
+
+
     }
 }
