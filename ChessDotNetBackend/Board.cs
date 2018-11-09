@@ -43,7 +43,7 @@ namespace ChessDotNetBackend
         {
             foreach (var piece in m_pieces)
             {
-                if (square == piece.Square)
+                if (square == piece.CurrentPosition)
                 {
                     return piece;
                 }
@@ -59,8 +59,8 @@ namespace ChessDotNetBackend
         /// <returns></returns>
         public bool IsNothingInTheWay(IPiece piece, Square square)
         {
-            int dx = piece.Square.x - square.x;
-            int dy = piece.Square.y - square.y;
+            int dx = piece.CurrentPosition.x - square.x;
+            int dy = piece.CurrentPosition.y - square.y;
             int xinc = (dx == 0) ? 0 : ((dx < 0) ? 1 : -1);  // ie. either no horizontal move or left / right
             int yinc = (dy == 0) ? 0 : ((dy < 0) ? 1 : -1);  // ie. either no vertical move or up / down
 
@@ -69,7 +69,7 @@ namespace ChessDotNetBackend
                 throw new InvalidOperationException();  // if this happens, we're stuffed - it shouldn't ever happen
             }
 
-            Square s = piece.Square;
+            Square s = piece.CurrentPosition;
             for (; ; )
             {
                 s = s.Offset(xinc, yinc);

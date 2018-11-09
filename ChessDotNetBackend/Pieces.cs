@@ -16,38 +16,38 @@ namespace ChessDotNetBackend
 
     public interface IPiece
     {
-        Square Square { get; }
+        Square CurrentPosition { get; }
         bool White { get; }
         string Name { get; }
 
         void Accept(IPieceVisitor visitor, object data);
         IEnumerable<Square> GetAllMoves(Board m_board);
-        bool IsMoveValid(Board board, Square square);
+        bool IsMoveValid(Board board, Square destination);
     }
 
     static class Piece
     {
-        public static bool addMove(IPiece piece, Board board, List<Square> moves, Square square)
+        public static bool addMove(IPiece piece, Board board, List<Square> moves, Square destination)
         {
-            if (square == piece.Square)
+            if (destination == piece.CurrentPosition)
             {
                 return true;
             }
-            if (piece.IsMoveValid(board, square))
+            if (piece.IsMoveValid(board, destination))
             {
-                moves.Add(square);
+                moves.Add(destination);
                 return true;
             }
             return false;
         }
 
-        public static bool IsMoveValid(IPiece piece, Board board, Square square)
+        public static bool IsMoveValid(IPiece piece, Board board, Square destination)
         {
-            if (!square.InBounds)
+            if (!destination.InBounds)
             {
                 return false;
             }
-            IPiece capturedPiece = board.GetPieceOnSquare(square);
+            IPiece capturedPiece = board.GetPieceOnSquare(destination);
             bool correctCapture = capturedPiece == null || capturedPiece.White != piece.White;
             return correctCapture;
         }
@@ -56,13 +56,13 @@ namespace ChessDotNetBackend
 
     public class Pawn : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public Pawn(Square square, bool white)
+        public Pawn(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Pawn" : "Black Pawn";
         }
@@ -76,55 +76,55 @@ namespace ChessDotNetBackend
         {
             var moves = new List<Square>();
             var dir = White ? -1 : 1;
-            Piece.addMove(this, board, moves, Square.Offset(0, dir * 1));
-            Piece.addMove(this, board, moves, Square.Offset(0, dir * 2));
-            Piece.addMove(this, board, moves, Square.Offset(1, dir * 1));
-            Piece.addMove(this, board, moves, Square.Offset(-1, dir * 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, dir * 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, dir * 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, dir * 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, dir * 1));
             return moves;
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if (!Piece.IsMoveValid(this, board, square))
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
             int nDir = White ? -1 : 1;  // which way can this pawn move?
-            if ((square.y - Square.y) * nDir > 2)   // can never go further than two spaces
+            if ((destination.y - CurrentPosition.y) * nDir > 2)   // can never go further than two spaces
                 return false;
-            if ((square.y - Square.y) * nDir <= 0)  // mustn't go backwards
+            if ((destination.y - CurrentPosition.y) * nDir <= 0)  // mustn't go backwards
                 return false;
-            if (((square.y - Square.y) * nDir > 1) && (Square.y != (White ? 6 : 1)))  // can go two spaces if we haven't moved
+            if (((destination.y - CurrentPosition.y) * nDir > 1) && (CurrentPosition.y != (White ? 6 : 1)))  // can go two spaces if we haven't moved
                 return false;
-            if ((square.x == Square.x) && board.GetPieceOnSquare(square) != null)  // can't take forwards
+            if ((destination.x == CurrentPosition.x) && board.GetPieceOnSquare(destination) != null)  // can't take forwards
                 return false;
-            if (square.x != Square.x)
+            if (destination.x != CurrentPosition.x)
             {
-                if (board.GetPieceOnSquare(square) == null)
+                if (board.GetPieceOnSquare(destination) == null)
                 {
                     return false;
                 }
-                if (Math.Abs(square.x - Square.x) > 1)  // can take diagonally
+                if (Math.Abs(destination.x - CurrentPosition.x) > 1)  // can take diagonally
                 {
                     return false;
                 }
             }
-            return board.IsNothingInTheWay(this, square);
+            return board.IsNothingInTheWay(this, destination);
 
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
     public class Rook : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public Rook(Square square, bool white)
+        public Rook(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Rook" : "Black Rook";
         }
@@ -139,23 +139,23 @@ namespace ChessDotNetBackend
             throw new NotImplementedException();
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
             return true;
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
     public class Knight : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public Knight(Square square, bool white)
+        public Knight(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Knight" : "Black Knight";
         }
@@ -165,28 +165,44 @@ namespace ChessDotNetBackend
             visitor.Visit(this, data);
         }
 
-        public IEnumerable<Square> GetAllMoves(Board m_board)
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(2, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(2, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2,1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2,-1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1,2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1,2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1,-2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1,-2));
+            return moves;
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
-            return true;
+            if (!Piece.IsMoveValid(this, board, destination))
+            {
+                return false;
+            }
+            var dx = destination.x - CurrentPosition.x;
+            var dy = destination.y - CurrentPosition.y;
+            //  two spaces forward, one to either side...
+            return (Math.Abs(dy) == 2 && Math.Abs(dx) == 1) || (Math.Abs(dy) == 1 && Math.Abs(dx) == 2);
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
     public class Bishop : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public Bishop(Square square, bool white)
+        public Bishop(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Bishop" : "Black Bishop";
         }
@@ -201,23 +217,23 @@ namespace ChessDotNetBackend
             throw new NotImplementedException();
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
             return true;
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
     public class Queen : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public Queen(Square square, bool white)
+        public Queen(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Queen" : "Black Queen";
         }
@@ -232,23 +248,23 @@ namespace ChessDotNetBackend
             throw new NotImplementedException();
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
             return true;
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
     public class King : IPiece
     {
-        public Square Square { get; set; }
+        public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
 
-        public King(Square square, bool white)
+        public King(Square currentPosition, bool white)
         {
-            Square = square;
+            CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White King" : "Black King";
         }
@@ -263,12 +279,12 @@ namespace ChessDotNetBackend
             throw new NotImplementedException();
         }
 
-        public bool IsMoveValid(Board board, Square square)
+        public bool IsMoveValid(Board board, Square destination)
         {
             return true;
         }
 
-        public override string ToString() => Name + " " + Square.ToString();
+        public override string ToString() => Name + " " + CurrentPosition.ToString();
     }
 
 }

@@ -157,7 +157,7 @@ namespace ChessWinForms
         {
             int squareWidth = m_width / 8;
             brush = piece.White ? m_whiteBrush : m_blackBrush;
-            pt = new Point(piece.Square.x * squareWidth + squareWidth / 2, piece.Square.y * squareWidth + squareWidth / 2);
+            pt = new Point(piece.CurrentPosition.x * squareWidth + squareWidth / 2, piece.CurrentPosition.y * squareWidth + squareWidth / 2);
 
         }
 
