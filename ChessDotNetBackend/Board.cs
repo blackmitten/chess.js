@@ -7,9 +7,23 @@ namespace ChessDotNetBackend
     public class Board
     {
         IList<IPiece> m_pieces = new List<IPiece>();
-        bool m_whitesTurn = true;
+
+        public Board(Board board)
+        {
+            this.WhitesTurn = board.WhitesTurn;
+            foreach (var piece in board.Pieces)
+            {
+                this.m_pieces.Add(piece.Copy());
+            }
+        }
+
+        public Board()
+        {
+        }
 
         public IList<IPiece> Pieces => m_pieces;
+
+        public bool WhitesTurn { get; set; }
 
         public static Board InitNewGame()
         {
@@ -36,6 +50,7 @@ namespace ChessDotNetBackend
             b.m_pieces.Add(new Bishop(new Square(5, 7), true));
             b.m_pieces.Add(new Queen(new Square(3, 7), true));
             b.m_pieces.Add(new King(new Square(4, 7), true));
+            b.WhitesTurn = true;
             return b;
         }
 
@@ -84,6 +99,57 @@ namespace ChessDotNetBackend
             }
         }
 
+        public Board MovePiece(IPiece m_selectedPiece, Square clickedSquare)
+        {
+            Board board = new Board(this);
+            return board;
+        }
+
+        public override bool Equals(object obj) => obj is Board && this == (Board)obj;
+
+        public override int GetHashCode() => base.GetHashCode();
+
+        public static bool operator ==(Board s1, Board s2)
+        {
+            if (s1.WhitesTurn != s2.WhitesTurn)
+            {
+                return false;
+            }
+            if (s1.Pieces.Count != s2.Pieces.Count)
+            {
+                return false;
+            }
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    Square s = new Square(x, y);
+                    IPiece piece1 = s1.GetPieceOnSquare(s);
+                    IPiece piece2 = s2.GetPieceOnSquare(s);
+                    if (piece1 == null && piece2 != null)
+                    {
+                        return false;
+                    }
+                    if (piece1 != null && piece2 == null)
+                    {
+                        return false;
+                    }
+                    if (piece1 != null && piece2 != null)
+                    {
+                        if (!piece1.Equals(piece2))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static bool operator !=(Board s1, Board s2)
+        {
+            return !(s1 == s2);
+        }
 
     }
 }

@@ -98,6 +98,18 @@ namespace ChessTests
             Assert.IsTrue(pawn.IsMoveValid(board, new Square(2, 2)));
         }
 
+        [TestMethod]
+        public void TestCopyBoard()
+        {
+            Board board = Board.InitNewGame();
+            Board board1 = new Board(board);
+            Assert.AreNotSame(board, board1);
+            Assert.AreEqual(board, board1);
+            board1.Pieces.Add(new Pawn(new Square(4, 4), true));
+            Assert.AreNotEqual(board, board1);
+            board.Pieces.Add(new Pawn(new Square(4, 4), true));
+            Assert.AreEqual(board, board1);
+        }
 
     }
 }

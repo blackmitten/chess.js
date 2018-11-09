@@ -21,6 +21,7 @@ namespace ChessDotNetBackend
         string Name { get; }
 
         void Accept(IPieceVisitor visitor, object data);
+        IPiece Copy();
         IEnumerable<Square> GetAllMoves(Board m_board);
         bool IsMoveValid(Board board, Square destination);
     }
@@ -67,10 +68,7 @@ namespace ChessDotNetBackend
             Name = White ? "White Pawn" : "Black Pawn";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board board)
         {
@@ -114,6 +112,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new Pawn(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is Pawn && this == (Pawn)obj;
+
+        public static bool operator ==(Pawn p1, Pawn p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(Pawn p1, Pawn p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
     public class Rook : IPiece
@@ -129,10 +141,7 @@ namespace ChessDotNetBackend
             Name = White ? "White Rook" : "Black Rook";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board m_board)
         {
@@ -145,6 +154,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new Rook(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is Rook && this == (Rook)obj;
+
+        public static bool operator ==(Rook p1, Rook p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(Rook p1, Rook p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
     public class Knight : IPiece
@@ -160,22 +183,19 @@ namespace ChessDotNetBackend
             Name = White ? "White Knight" : "Black Knight";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
             Piece.addMove(this, board, moves, CurrentPosition.Offset(2, 1));
             Piece.addMove(this, board, moves, CurrentPosition.Offset(2, -1));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2,1));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2,-1));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(1,2));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1,2));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(1,-2));
-            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1,-2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, -2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, -2));
             return moves;
         }
 
@@ -192,6 +212,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new Knight(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is Knight && this == (Knight)obj;
+
+        public static bool operator ==(Knight p1, Knight p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(Knight p1, Knight p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
     public class Bishop : IPiece
@@ -207,10 +241,7 @@ namespace ChessDotNetBackend
             Name = White ? "White Bishop" : "Black Bishop";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board m_board)
         {
@@ -223,6 +254,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new Bishop(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is Bishop && this == (Bishop)obj;
+
+        public static bool operator ==(Bishop p1, Bishop p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(Bishop p1, Bishop p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
     public class Queen : IPiece
@@ -238,10 +283,7 @@ namespace ChessDotNetBackend
             Name = White ? "White Queen" : "Black Queen";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board m_board)
         {
@@ -254,6 +296,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new Queen(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is Queen && this == (Queen)obj;
+
+        public static bool operator ==(Queen p1, Queen p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(Queen p1, Queen p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
     public class King : IPiece
@@ -269,10 +325,7 @@ namespace ChessDotNetBackend
             Name = White ? "White King" : "Black King";
         }
 
-        public void Accept(IPieceVisitor visitor, object data)
-        {
-            visitor.Visit(this, data);
-        }
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
         public IEnumerable<Square> GetAllMoves(Board m_board)
         {
@@ -285,6 +338,20 @@ namespace ChessDotNetBackend
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
+
+        public IPiece Copy() => new King(CurrentPosition, White);
+
+        public override bool Equals(object obj) => obj is King && this == (King)obj;
+
+        public static bool operator ==(King p1, King p2)
+        {
+            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+        }
+
+        public static bool operator !=(King p1, King p2)
+        {
+            return !(p1 == p2);
+        }
     }
 
 }

@@ -23,6 +23,7 @@ namespace ChessWinForms
         private Brush m_blackBrush = new SolidBrush(Color.Black);
         private Square m_selectedSquare = new Square(-1, -1);
         private List<Square> m_highlightedSquares = new List<Square>();
+        private IPiece m_selectedPiece;
 
         private int SquareWidth => m_width / 8;
 
@@ -162,8 +163,7 @@ namespace ChessWinForms
         }
 
         #endregion
-
-
+        
         private void ChessBoard2D_MouseClick(object sender, MouseEventArgs e)
         {
             double squareWidth = m_width / 8;
@@ -172,15 +172,38 @@ namespace ChessWinForms
             SquareClicked(new Square(x, y));
         }
 
-        private void SquareClicked(Square square)
+        private void SquareClicked(Square clickedSquare)
         {
-            Console.WriteLine("Clicked " + square);
-            m_selectedSquare = square;
-            IPiece clickedPiece = m_board.GetPieceOnSquare(square);
-            if (clickedPiece != null)
+            if(!clickedSquare.InBounds)
             {
-                m_highlightedSquares.Clear();
-                m_highlightedSquares.AddRange(clickedPiece.GetAllMoves(m_board));
+                return;
+            }
+            m_selectedSquare = new Square(-1,-1);
+            m_highlightedSquares.Clear();            
+            IPiece clickedPiece = m_board.GetPieceOnSquare(clickedSquare);
+
+            if (m_selectedPiece== null)
+            {
+                if(clickedPiece!=null)
+                {
+                    if(clickedPiece.White==m_board.WhitesTurn)
+                    {
+                        m_selectedPiece = clickedPiece;
+                        m_selectedSquare = clickedSquare;
+                    }
+                    if(m_selectedPiece!=null)
+                    {
+                        m_highlightedSquares.AddRange(clickedPiece.GetAllMoves(m_board));
+                    }
+                }
+            }
+            else
+            {
+                if (m_selectedPiece.IsMoveValid(m_board, clickedSquare))
+                {
+                    m_board = m_board.MovePiece(m_selectedPiece, clickedSquare);
+                }
+                m_selectedPiece = null;
             }
             Invalidate();
         }
