@@ -99,6 +99,15 @@ namespace ChessTests
         }
 
         [TestMethod]
+        public void TestBoardComparedToNull()
+        {
+            Assert.AreNotEqual(new Board(), null);
+            Assert.AreNotEqual(null, new Board());
+            Assert.AreEqual(new Board(), new Board());
+            Assert.AreNotSame(new Board(), new Board());
+        }
+
+        [TestMethod]
         public void TestCopyBoard()
         {
             Board board = Board.InitNewGame();

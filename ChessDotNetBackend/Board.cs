@@ -99,23 +99,51 @@ namespace ChessDotNetBackend
             }
         }
 
-        public Board MovePiece(IPiece m_selectedPiece, Square clickedSquare)
+        public Board MovePiece(IPiece piece, Square destinationSquare)
         {
             Board board = new Board(this);
+            var capturedPiece = GetPieceOnSquare(destinationSquare);
+            if(capturedPiece!=null)
+            {
+                if (capturedPiece.White != piece.White)
+                {
+                    board.RemovePiece(capturedPiece);
+                }
+                else
+                {
+                    throw new InvalidOperationException("tried to move to a square occupied by a piece on our own side");
+                }
+            }
+            var pieceCopy = board.GetPieceOnSquare(piece.CurrentPosition);
+            pieceCopy.CurrentPosition = destinationSquare;
+            board.WhitesTurn = !WhitesTurn;
             return board;
         }
 
-        public override bool Equals(object obj) => obj is Board && this == (Board)obj;
-
-        public override int GetHashCode() => base.GetHashCode();
-
-        public static bool operator ==(Board s1, Board s2)
+        private void RemovePiece(IPiece capturedPiece)
         {
-            if (s1.WhitesTurn != s2.WhitesTurn)
+            for(int i=0; i<m_pieces.Count;i++)
+            {
+                if(m_pieces[i].CurrentPosition==capturedPiece.CurrentPosition)
+                {
+                    m_pieces.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            if (s1.Pieces.Count != s2.Pieces.Count)
+            Board b = (Board)obj;
+            if (WhitesTurn != b.WhitesTurn)
+            {
+                return false;
+            }
+            if (Pieces.Count != b.Pieces.Count)
             {
                 return false;
             }
@@ -124,8 +152,8 @@ namespace ChessDotNetBackend
                 for (int y = 0; y < 8; y++)
                 {
                     Square s = new Square(x, y);
-                    IPiece piece1 = s1.GetPieceOnSquare(s);
-                    IPiece piece2 = s2.GetPieceOnSquare(s);
+                    IPiece piece1 = GetPieceOnSquare(s);
+                    IPiece piece2 = b.GetPieceOnSquare(s);
                     if (piece1 == null && piece2 != null)
                     {
                         return false;
@@ -144,11 +172,6 @@ namespace ChessDotNetBackend
                 }
             }
             return true;
-        }
-
-        public static bool operator !=(Board s1, Board s2)
-        {
-            return !(s1 == s2);
         }
 
     }

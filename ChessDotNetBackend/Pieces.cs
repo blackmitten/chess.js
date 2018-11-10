@@ -16,7 +16,7 @@ namespace ChessDotNetBackend
 
     public interface IPiece
     {
-        Square CurrentPosition { get; }
+        Square CurrentPosition { get; set; }
         bool White { get; }
         string Name { get; }
 
@@ -115,17 +115,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new Pawn(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is Pawn && this == (Pawn)obj;
-
-        public static bool operator ==(Pawn p1, Pawn p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Pawn p = (Pawn)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(Pawn p1, Pawn p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
     public class Rook : IPiece
@@ -157,17 +156,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new Rook(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is Rook && this == (Rook)obj;
-
-        public static bool operator ==(Rook p1, Rook p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Rook p = (Rook)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(Rook p1, Rook p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
     public class Knight : IPiece
@@ -215,17 +213,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new Knight(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is Knight && this == (Knight)obj;
-
-        public static bool operator ==(Knight p1, Knight p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Knight p = (Knight)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(Knight p1, Knight p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
     public class Bishop : IPiece
@@ -257,17 +254,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new Bishop(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is Bishop && this == (Bishop)obj;
-
-        public static bool operator ==(Bishop p1, Bishop p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Bishop p = (Bishop)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(Bishop p1, Bishop p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
     public class Queen : IPiece
@@ -299,17 +295,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new Queen(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is Queen && this == (Queen)obj;
-
-        public static bool operator ==(Queen p1, Queen p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Queen p = (Queen)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(Queen p1, Queen p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
     public class King : IPiece
@@ -341,17 +336,16 @@ namespace ChessDotNetBackend
 
         public IPiece Copy() => new King(CurrentPosition, White);
 
-        public override bool Equals(object obj) => obj is King && this == (King)obj;
-
-        public static bool operator ==(King p1, King p2)
+        public override bool Equals(object obj)
         {
-            return p1.White == p2.White && p1.CurrentPosition == p2.CurrentPosition;
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            King p = (King)obj;
+            return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
-        public static bool operator !=(King p1, King p2)
-        {
-            return !(p1 == p2);
-        }
     }
 
 }
