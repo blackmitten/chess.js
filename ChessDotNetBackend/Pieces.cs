@@ -142,14 +142,35 @@ namespace ChessDotNetBackend
 
         public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves(Board m_board)
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+            int x = CurrentPosition.x;
+            int y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x, y--))) ;
+            return moves;
         }
 
         public bool IsMoveValid(Board board, Square destination)
         {
-            return true;
+            if (!Piece.IsMoveValid(this, board, destination))
+            {
+                return false;
+            }
+            if (CurrentPosition.x != destination.x && CurrentPosition.y != destination.y)
+            {
+                return false;
+            }
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
@@ -240,14 +261,35 @@ namespace ChessDotNetBackend
 
         public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves(Board m_board)
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+            int x = CurrentPosition.x;
+            int y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y--))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y--))) ;
+            return moves;
         }
 
         public bool IsMoveValid(Board board, Square destination)
         {
-            return true;
+            if (!Piece.IsMoveValid(this, board, destination))
+            {
+                return false;
+            }
+            if (Math.Abs(destination.x - CurrentPosition.x) != Math.Abs(destination.y - CurrentPosition.y))
+            {
+                return false;
+            }
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
@@ -281,14 +323,50 @@ namespace ChessDotNetBackend
 
         public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves(Board m_board)
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+            int x = CurrentPosition.x;
+            int y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y--))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y--))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x++, y))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x--, y))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x, y++))) ;
+            x = CurrentPosition.x;
+            y = CurrentPosition.y;
+            while (Piece.addMove(this, board, moves, new Square(x, y--))) ;
+            return moves;
         }
 
         public bool IsMoveValid(Board board, Square destination)
         {
-            return true;
+            if (!Piece.IsMoveValid(this, board, destination))
+            {
+                return false;
+            }
+            if (CurrentPosition.x != destination.x && CurrentPosition.y != destination.y)
+            {
+                if (Math.Abs(destination.x - CurrentPosition.x) != Math.Abs(destination.y - CurrentPosition.y))
+                {
+                    return false;
+                }
+            }
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
@@ -322,13 +400,34 @@ namespace ChessDotNetBackend
 
         public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves(Board m_board)
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 0));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 0));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, -1));
+            return moves;
         }
 
         public bool IsMoveValid(Board board, Square destination)
         {
+            if (!Piece.IsMoveValid(this, board, destination))
+            {
+                return false;
+            }
+            if (Math.Abs(destination.x - CurrentPosition.x) > 1)
+            {
+                return false;
+            }
+            if (Math.Abs(destination.y - CurrentPosition.y) > 1)
+            {
+                return false;
+            }
             return true;
         }
 
