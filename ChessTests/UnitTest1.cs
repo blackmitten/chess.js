@@ -120,5 +120,15 @@ namespace ChessTests
             Assert.AreEqual(board, board1);
         }
 
+        [TestMethod]
+        public void TestScoring()
+        {
+            Board empty = new Board();
+            Assert.IsTrue(0 == empty.CalcWhitesScore());
+
+            Board start = Board.InitNewGame();
+            Assert.IsTrue(0 == start.CalcWhitesScore());
+        }
+
     }
 }
