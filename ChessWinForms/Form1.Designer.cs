@@ -31,12 +31,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.chessBoard2D1 = new ChessWinForms.ChessBoard2D();
-            this.panel3.SuspendLayout();
+            this.textBoxWhitesScore = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.textBoxWhitesScore);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -53,20 +56,28 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.chessBoard2D1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(136, 35);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(621, 534);
             this.panel3.TabIndex = 2;
             // 
-            // chessBoard2D1
+            // textBoxWhitesScore
             // 
-            this.chessBoard2D1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chessBoard2D1.Location = new System.Drawing.Point(0, 0);
-            this.chessBoard2D1.Name = "chessBoard2D1";
-            this.chessBoard2D1.Size = new System.Drawing.Size(621, 534);
-            this.chessBoard2D1.TabIndex = 0;
+            this.textBoxWhitesScore.Enabled = false;
+            this.textBoxWhitesScore.Location = new System.Drawing.Point(13, 75);
+            this.textBoxWhitesScore.Name = "textBoxWhitesScore";
+            this.textBoxWhitesScore.Size = new System.Drawing.Size(100, 20);
+            this.textBoxWhitesScore.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "White\'s score";
             // 
             // Form1
             // 
@@ -78,7 +89,8 @@
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.panel3.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -88,7 +100,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
-        private ChessBoard2D chessBoard2D1;
+        private System.Windows.Forms.TextBox textBoxWhitesScore;
+        private System.Windows.Forms.Label label1;
     }
 }
 

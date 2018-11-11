@@ -13,11 +13,23 @@ namespace ChessWinForms
 {
     public partial class Form1 : Form
     {
+        private ChessBoard2D chessBoard2D1;
+
         public Form1()
         {
             InitializeComponent();
 
+            // Putting this in the designer screws it up for some reason...
+            this.chessBoard2D1 = new ChessWinForms.ChessBoard2D();
+            this.chessBoard2D1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chessBoard2D1.Location = new System.Drawing.Point(0, 0);
+            this.chessBoard2D1.Name = "chessBoard2D1";
+            this.chessBoard2D1.Size = new System.Drawing.Size(621, 534);
+            this.chessBoard2D1.TabIndex = 0;
+            this.panel3.Controls.Add(this.chessBoard2D1);
+
             Board board = Board.InitNewGame();
+
             this.chessBoard2D1.Board = board;
             this.chessBoard2D1.BoardUpdated += ChessBoard2D1_BoardUpdated;
         }
@@ -26,6 +38,7 @@ namespace ChessWinForms
         {
             Board board = e.Board;
             double whitesScore = board.CalcWhitesScore();
+            this.textBoxWhitesScore.Text = whitesScore.ToString("0.00");
         }
     }
 }
