@@ -76,7 +76,7 @@ namespace ChessWinForms
                 {
                     e.Graphics.DrawRectangle(m_selectionPen, m_selectedSquare.x * SquareWidth, m_selectedSquare.y * SquareWidth, SquareWidth, SquareWidth);
                 }
-                foreach(var square in m_highlightedSquares)
+                foreach (var square in m_highlightedSquares)
                 {
                     e.Graphics.DrawRectangle(m_highlightPen, square.x * SquareWidth, square.y * SquareWidth, SquareWidth, SquareWidth);
                 }
@@ -163,7 +163,7 @@ namespace ChessWinForms
         }
 
         #endregion
-        
+
         private void ChessBoard2D_MouseClick(object sender, MouseEventArgs e)
         {
             double squareWidth = m_width / 8;
@@ -174,24 +174,24 @@ namespace ChessWinForms
 
         private void SquareClicked(Square clickedSquare)
         {
-            if(!clickedSquare.InBounds)
+            if (!clickedSquare.InBounds)
             {
                 return;
             }
-            m_selectedSquare = new Square(-1,-1);
-            m_highlightedSquares.Clear();            
+            m_selectedSquare = new Square(-1, -1);
+            m_highlightedSquares.Clear();
             IPiece clickedPiece = m_board.GetPieceOnSquare(clickedSquare);
 
-            if (m_selectedPiece== null)
+            if (m_selectedPiece == null)
             {
-                if(clickedPiece!=null)
+                if (clickedPiece != null)
                 {
-                    if(clickedPiece.White==m_board.WhitesTurn)
+                    if (clickedPiece.White == m_board.WhitesTurn)
                     {
                         m_selectedPiece = clickedPiece;
                         m_selectedSquare = clickedSquare;
                     }
-                    if(m_selectedPiece!=null)
+                    if (m_selectedPiece != null)
                     {
                         m_highlightedSquares.AddRange(clickedPiece.GetAllMoves(m_board));
                     }
@@ -202,10 +202,24 @@ namespace ChessWinForms
                 if (m_selectedPiece.IsMoveValid(m_board, clickedSquare))
                 {
                     m_board = m_board.MovePiece(m_selectedPiece, clickedSquare);
+                    BoardUpdated(this, new BoardUpdateEventArgs(m_board) );
                 }
                 m_selectedPiece = null;
             }
             Invalidate();
+        }
+
+        public event EventHandler<BoardUpdateEventArgs> BoardUpdated;
+
+    }
+
+    public class BoardUpdateEventArgs : EventArgs
+    {
+        public Board Board { get; }
+
+        public BoardUpdateEventArgs(Board board)
+        {
+            Board = board;
         }
     }
 }

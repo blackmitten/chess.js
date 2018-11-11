@@ -20,15 +20,29 @@ namespace ChessDotNetBackend
         public double CalcWhitesScore()
         {
             double whitesScore = 0;
-            foreach(var piece in m_pieces)
+            foreach (var piece in m_pieces)
             {
-                if(piece.White)
+                if (piece.White)
                 {
                     whitesScore += piece.Value;
                 }
                 else
                 {
                     whitesScore -= piece.Value;
+                }
+                if (piece.PieceType == PieceType.Pawn)
+                {
+                    int spacesAdvanced = 0;
+                    if ( piece.White)
+                    {
+                        spacesAdvanced = 6 - piece.CurrentPosition.y;
+                    }
+                    else
+                    {
+                        spacesAdvanced = piece.CurrentPosition.y - 1;
+                    }
+                    whitesScore += 0.1 * spacesAdvanced * (piece.White ? 1 : -1);
+
                 }
             }
 
@@ -121,7 +135,7 @@ namespace ChessDotNetBackend
         {
             Board board = new Board(this);
             var capturedPiece = GetPieceOnSquare(destinationSquare);
-            if(capturedPiece!=null)
+            if (capturedPiece != null)
             {
                 if (capturedPiece.White != piece.White)
                 {
@@ -140,9 +154,9 @@ namespace ChessDotNetBackend
 
         private void RemovePiece(IPiece capturedPiece)
         {
-            for(int i=0; i<m_pieces.Count;i++)
+            for (int i = 0; i < m_pieces.Count; i++)
             {
-                if(m_pieces[i].CurrentPosition==capturedPiece.CurrentPosition)
+                if (m_pieces[i].CurrentPosition == capturedPiece.CurrentPosition)
                 {
                     m_pieces.RemoveAt(i);
                     break;

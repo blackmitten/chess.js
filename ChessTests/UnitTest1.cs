@@ -128,6 +128,27 @@ namespace ChessTests
 
             Board start = Board.InitNewGame();
             Assert.IsTrue(0 == start.CalcWhitesScore());
+
+            start.Pieces.Add(new Pawn(new Square(4, 4), true));
+            Assert.IsTrue(start.CalcWhitesScore() > 0);
+            start.Pieces.Add(new Queen(new Square(2, 4), false));
+            Assert.IsTrue(start.CalcWhitesScore() < 0);
+
+        }
+
+        [TestMethod]
+        public void TestScoring2()
+        { 
+            Board pawn1 = new Board();
+            Board pawn2 = new Board();
+            pawn1.Pieces.Add(new Pawn(new Square(4, 6), true));
+            pawn2.Pieces.Add(new Pawn(new Square(4, 5), true));
+            Assert.IsTrue(pawn2.CalcWhitesScore() > pawn1.CalcWhitesScore());
+            pawn1 = new Board();
+            pawn2 = new Board();
+            pawn1.Pieces.Add(new Pawn(new Square(2, 4), false));
+            pawn2.Pieces.Add(new Pawn(new Square(2, 5), false));
+            Assert.IsTrue(pawn2.CalcWhitesScore() < pawn1.CalcWhitesScore());
         }
 
     }

@@ -4,6 +4,16 @@ using System.Text;
 
 namespace ChessDotNetBackend
 {
+    public enum PieceType
+    {
+        Pawn,
+        Rook,
+        Knight,
+        Bishop,
+        Queen,
+        King
+    }
+
     public interface IPieceVisitor
     {
         void Visit(Pawn pawn, object data);
@@ -25,6 +35,7 @@ namespace ChessDotNetBackend
         IEnumerable<Square> GetAllMoves(Board m_board);
         bool IsMoveValid(Board board, Square destination);
         double Value { get; }
+        PieceType PieceType { get; }
     }
 
     static class Piece
@@ -127,6 +138,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 1;
+
+        public PieceType PieceType => PieceType.Pawn;
     }
 
     public class Rook : IPiece
@@ -190,6 +203,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 5;
+
+        public PieceType PieceType => PieceType.Rook;
     }
 
     public class Knight : IPiece
@@ -248,6 +263,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 3;
+
+        public PieceType PieceType => PieceType.Knight;
     }
 
     public class Bishop : IPiece
@@ -311,6 +328,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 3;
+
+        public PieceType PieceType => PieceType.Bishop;
     }
 
     public class Queen : IPiece
@@ -389,6 +408,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 9;
+
+        public PieceType PieceType => PieceType.Queen;
     }
 
     public class King : IPiece
@@ -452,6 +473,8 @@ namespace ChessDotNetBackend
         }
 
         public double Value => 1000;
+
+        public PieceType PieceType => PieceType.King;
     }
 
 }

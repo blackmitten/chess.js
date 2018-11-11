@@ -19,6 +19,13 @@ namespace ChessWinForms
 
             Board board = Board.InitNewGame();
             this.chessBoard2D1.Board = board;
+            this.chessBoard2D1.BoardUpdated += ChessBoard2D1_BoardUpdated;
+        }
+
+        private void ChessBoard2D1_BoardUpdated(object sender, BoardUpdateEventArgs e)
+        {
+            Board board = e.Board;
+            double whitesScore = board.CalcWhitesScore();
         }
     }
 }
