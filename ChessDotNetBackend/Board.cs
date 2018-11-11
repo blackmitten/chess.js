@@ -17,6 +17,24 @@ namespace ChessDotNetBackend
             }
         }
 
+        public double CalcWhitesScore()
+        {
+            double whitesScore = 0;
+            foreach(var piece in m_pieces)
+            {
+                if(piece.White)
+                {
+                    whitesScore += piece.Value;
+                }
+                else
+                {
+                    whitesScore -= piece.Value;
+                }
+            }
+
+            return whitesScore;
+        }
+
         public Board()
         {
         }

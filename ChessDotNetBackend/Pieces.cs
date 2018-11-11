@@ -24,6 +24,7 @@ namespace ChessDotNetBackend
         IPiece Copy();
         IEnumerable<Square> GetAllMoves(Board m_board);
         bool IsMoveValid(Board board, Square destination);
+        double Value { get; }
     }
 
     static class Piece
@@ -125,6 +126,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 1;
     }
 
     public class Rook : IPiece
@@ -187,6 +189,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 5;
     }
 
     public class Knight : IPiece
@@ -244,6 +247,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 3;
     }
 
     public class Bishop : IPiece
@@ -306,6 +310,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 3;
     }
 
     public class Queen : IPiece
@@ -383,6 +388,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 9;
     }
 
     public class King : IPiece
@@ -445,6 +451,7 @@ namespace ChessDotNetBackend
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
+        public double Value => 1000;
     }
 
 }
