@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ChessDotNetBackend
 {
@@ -33,7 +34,7 @@ namespace ChessDotNetBackend
                 if (piece.PieceType == PieceType.Pawn)
                 {
                     int spacesAdvanced = 0;
-                    if ( piece.White)
+                    if (piece.White)
                     {
                         spacesAdvanced = 6 - piece.CurrentPosition.y;
                     }
@@ -204,6 +205,34 @@ namespace ChessDotNetBackend
                 }
             }
             return true;
+        }
+
+        private void Minimax(Board root)
+        {
+            var boards = GetAllNextBoards();
+        }
+
+        private IEnumerable<Board> GetAllNextBoards()
+        {
+            var boards = new List<Board>();
+            foreach (var piece in m_pieces)
+            {
+                if (WhitesTurn == piece.White)
+                {
+                    var moves = piece.GetAllMoves(this);
+                    foreach (var move in moves)
+                    {
+                        boards.Add(MovePiece(piece, move));
+                    }
+                }
+            }
+            return boards;
+        }
+
+        public Board ThinkAndMove()
+        {
+            IEnumerable<Board> boards = GetAllNextBoards();
+            return boards.First();
         }
 
     }

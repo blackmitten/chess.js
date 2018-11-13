@@ -14,6 +14,7 @@ namespace ChessWinForms
     public partial class Form1 : Form
     {
         private ChessBoard2D chessBoard2D1;
+        private Board m_currentBoard;
 
         public Form1()
         {
@@ -28,17 +29,24 @@ namespace ChessWinForms
             this.chessBoard2D1.TabIndex = 0;
             this.panel3.Controls.Add(this.chessBoard2D1);
 
-            Board board = Board.InitNewGame();
+            m_currentBoard = Board.InitNewGame();
 
-            this.chessBoard2D1.Board = board;
+            this.chessBoard2D1.Board = m_currentBoard;
             this.chessBoard2D1.BoardUpdated += ChessBoard2D1_BoardUpdated;
         }
 
         private void ChessBoard2D1_BoardUpdated(object sender, BoardUpdateEventArgs e)
         {
-            Board board = e.Board;
-            double whitesScore = board.CalcWhitesScore();
+            m_currentBoard = e.Board;
+            double whitesScore = m_currentBoard.CalcWhitesScore();
             this.textBoxWhitesScore.Text = whitesScore.ToString("0.00");
         }
+
+        private void buttonMove_Click(object sender, EventArgs e)
+        {
+            Board newBoard = m_currentBoard.ThinkAndMove();
+            chessBoard2D1.Update(newBoard);
+        }
+
     }
 }

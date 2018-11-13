@@ -83,6 +83,13 @@ namespace ChessWinForms
             }
         }
 
+        internal void Update(Board newBoard)
+        {
+            m_board = newBoard;
+            BoardUpdated(this, new BoardUpdateEventArgs(m_board));
+            Invalidate();
+        }
+
         #region piece drawing
 
         public void Visit(Pawn piece, object data)
