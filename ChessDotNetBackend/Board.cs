@@ -231,8 +231,36 @@ namespace ChessDotNetBackend
 
         public Board ThinkAndMove()
         {
+            Board selectedBoard = null;
+
             IEnumerable<Board> boards = GetAllNextBoards();
-            return boards.First();
+            double maxScore = double.MinValue;
+            double minScore = double.MaxValue;
+            Board maxScoreBoard = null;
+            Board minScoreBoard = null;
+            foreach (var board in boards)
+            {
+                var score = board.CalcWhitesScore();
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    maxScoreBoard = board;
+                }
+                if (score < minScore)
+                {
+                    minScore = score;
+                    minScoreBoard = board;
+                }
+            }
+            if(WhitesTurn)
+            {
+                selectedBoard = maxScoreBoard;
+            }
+            else
+            {
+                selectedBoard = minScoreBoard;
+            }
+            return selectedBoard;
         }
 
     }
