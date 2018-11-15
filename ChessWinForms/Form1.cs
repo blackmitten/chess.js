@@ -15,6 +15,7 @@ namespace ChessWinForms
     {
         private ChessBoard2D chessBoard2D1;
         private Board m_currentBoard;
+        private Game m_game;
 
         public Form1()
         {
@@ -29,12 +30,14 @@ namespace ChessWinForms
             this.chessBoard2D1.TabIndex = 0;
             this.panel3.Controls.Add(this.chessBoard2D1);
 
-            m_currentBoard = Board.InitNewGame();
+            //            m_game = new Game(true, false, this.chessBoard2D1);
+            //            m_game = new Game(false, true, this.chessBoard2D1);
+            //m_game = new Game(true, true, this.chessBoard2D1);
+            m_game = new Game(false, false, this.chessBoard2D1);
 
-            this.chessBoard2D1.Board = m_currentBoard;
-            this.chessBoard2D1.BoardUpdated += ChessBoard2D1_BoardUpdated;
         }
 
+        /*
         private void ChessBoard2D1_BoardUpdated(object sender, BoardUpdateEventArgs e)
         {
             m_currentBoard = e.Board;
@@ -47,12 +50,16 @@ namespace ChessWinForms
 
             }
         }
+        */
 
         private void buttonMove_Click(object sender, EventArgs e)
         {
+            /*
             Board newBoard = m_currentBoard.ThinkAndMove();
             chessBoard2D1.Update(newBoard);
+            */
         }
+        
 
     }
 }

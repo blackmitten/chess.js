@@ -11,7 +11,7 @@ using ChessDotNetBackend;
 
 namespace ChessWinForms
 {
-    public partial class ChessBoard2D : UserControl, IPieceVisitor
+    public partial class ChessBoard2D : UserControl, IPieceVisitor, IUserInterface
     {
         private int m_width = 400;
         private Brush m_darkBrush;
@@ -83,7 +83,7 @@ namespace ChessWinForms
             }
         }
 
-        internal void Update(Board newBoard)
+        public void Update(Board newBoard)
         {
             m_board = newBoard;
             BoardUpdated(this, new BoardUpdateEventArgs(m_board));
@@ -220,13 +220,4 @@ namespace ChessWinForms
 
     }
 
-    public class BoardUpdateEventArgs : EventArgs
-    {
-        public Board Board { get; }
-
-        public BoardUpdateEventArgs(Board board)
-        {
-            Board = board;
-        }
-    }
 }
