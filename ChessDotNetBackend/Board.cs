@@ -207,11 +207,6 @@ namespace ChessDotNetBackend
             return true;
         }
 
-        private void Minimax(Board root)
-        {
-            var boards = GetAllNextBoards();
-        }
-
         private IEnumerable<Board> GetAllNextBoards()
         {
             var boards = new List<Board>();
@@ -228,8 +223,102 @@ namespace ChessDotNetBackend
             }
             return boards;
         }
+        /*
+        private Tuple<double, Board> Minimax(int depth, bool maximizingPlayer)
+        {
+            if (depth == 0)
+            {
+                return new Tuple<double, Board>(CalcWhitesScore(), this);
+            }
+            else
+            {
+                var boards = GetAllNextBoards();
+                if (maximizingPlayer)
+                {
+                    Tuple<double, Board> max = new Tuple<double, Board>(double.MinValue, null);
+                    foreach (var board in boards)
+                    {
+                        Tuple<double, Board> mm = board.Minimax(depth - 1, false);
+
+                        if (mm.Item1 > max.Item1)
+                        {
+                            max = new Tuple<double, Board>(mm.Item1, mm.Item2);
+                        }
+                    }
+                    return max;
+                }
+                else
+                {
+                    Tuple<double, Board> min = new Tuple<double, Board>(double.MaxValue, null);
+                    foreach (var board in boards)
+                    {
+                        Tuple<double, Board> mm = board.Minimax(depth - 1, true);
+
+                        if (mm.Item1 < min.Item1)
+                        {
+                            min = new Tuple<double, Board>(mm.Item1, mm.Item2);
+                        }
+                    }
+                    return min;
+                }
+            }
+
+        }
+        */
+
+        double Minimax(int depth, bool maximizing, bool whitesTurn)
+        {
+            if (depth == 0)
+            {
+                double score = this.CalcWhitesScore();
+                return whitesTurn ? score : -score;
+            }
+            IEnumerable<Board> boards = GetAllNextBoards();
+            if (maximizing)
+            {
+                double max = double.MinValue;
+                foreach (var board in boards)
+                {
+                    max = Math.Max(max, board.Minimax(depth - 1, !maximizing, whitesTurn));
+                }
+                return max;
+            }
+            else
+            {
+                double min = double.MaxValue;
+                foreach (var board in boards)
+                {
+                    min = Math.Min(min, board.Minimax(depth - 1, !maximizing, whitesTurn));
+                }
+                return min;
+            }
+
+        }
 
         public Board ThinkAndMove()
+        {
+            IEnumerable<Board> boards = GetAllNextBoards();
+            double bestScore = double.MinValue;
+            Board bestBoard = null;
+            foreach (var board in boards)
+            {
+                var score = board.Evaluate(WhitesTurn);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestBoard = board;
+                }
+            }
+            Console.WriteLine("Choosing move with score of {0}", bestScore);
+            return bestBoard;
+        }
+
+        public double Evaluate(bool whitesTurn)
+        {
+            return Minimax(2, false, whitesTurn);
+        }
+
+        public Board StupidMove()
         {
             Board selectedBoard = null;
 
@@ -252,7 +341,7 @@ namespace ChessDotNetBackend
                     minScoreBoard = board;
                 }
             }
-            if(WhitesTurn)
+            if (WhitesTurn)
             {
                 selectedBoard = maxScoreBoard;
             }
