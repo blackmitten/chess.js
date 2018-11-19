@@ -18,6 +18,18 @@ namespace ChessDotNetBackend
             }
         }
 
+        public double CalcSidesScore(bool whitesTurn)
+        {
+            if (whitesTurn)
+            {
+                return CalcWhitesScore();
+            }
+            else
+            {
+                return -CalcWhitesScore();
+            }
+        }
+
         public double CalcWhitesScore()
         {
             double whitesScore = 0;
@@ -207,7 +219,7 @@ namespace ChessDotNetBackend
             return true;
         }
 
-        private IEnumerable<Board> GetAllNextBoards()
+        private List<Board> GetAllNextBoards()
         {
             var boards = new List<Board>();
             foreach (var piece in m_pieces)
@@ -223,58 +235,16 @@ namespace ChessDotNetBackend
             }
             return boards;
         }
-        /*
-        private Tuple<double, Board> Minimax(int depth, bool maximizingPlayer)
-        {
-            if (depth == 0)
-            {
-                return new Tuple<double, Board>(CalcWhitesScore(), this);
-            }
-            else
-            {
-                var boards = GetAllNextBoards();
-                if (maximizingPlayer)
-                {
-                    Tuple<double, Board> max = new Tuple<double, Board>(double.MinValue, null);
-                    foreach (var board in boards)
-                    {
-                        Tuple<double, Board> mm = board.Minimax(depth - 1, false);
-
-                        if (mm.Item1 > max.Item1)
-                        {
-                            max = new Tuple<double, Board>(mm.Item1, mm.Item2);
-                        }
-                    }
-                    return max;
-                }
-                else
-                {
-                    Tuple<double, Board> min = new Tuple<double, Board>(double.MaxValue, null);
-                    foreach (var board in boards)
-                    {
-                        Tuple<double, Board> mm = board.Minimax(depth - 1, true);
-
-                        if (mm.Item1 < min.Item1)
-                        {
-                            min = new Tuple<double, Board>(mm.Item1, mm.Item2);
-                        }
-                    }
-                    return min;
-                }
-            }
-
-        }
-        */
 
         double Minimax(int depth, double alpha, double beta, bool maximizing, bool whitesTurn, ref long boardsConsidered)
         {
             if (depth == 0)
             {
                 boardsConsidered++;
-                double score = this.CalcWhitesScore();
-                return whitesTurn ? score : -score;
+                return CalcSidesScore(whitesTurn);
             }
-            IEnumerable<Board> boards = GetAllNextBoards();
+            List<Board> boards = GetAllNextBoards();
+            boards.Sort((a, b) => a.CalcSidesScore(maximizing).CompareTo(b.CalcSidesScore(maximizing)));
             if (maximizing)
             {
                 double max = double.MinValue;
@@ -282,7 +252,7 @@ namespace ChessDotNetBackend
                 {
                     max = Math.Max(max, board.Minimax(depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered));
                     alpha = Math.Max(alpha, max);
-                    if(alpha>=beta)
+                    if (alpha >= beta)
                     {
                         break;
                     }
@@ -296,7 +266,7 @@ namespace ChessDotNetBackend
                 {
                     min = Math.Min(min, board.Minimax(depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered));
                     beta = Math.Min(beta, min);
-                    if(alpha>=beta)
+                    if (alpha >= beta)
                     {
                         break;
                     }
@@ -308,6 +278,7 @@ namespace ChessDotNetBackend
 
         public Board ThinkAndMove()
         {
+            DateTime t0 = DateTime.UtcNow;
             IEnumerable<Board> boards = GetAllNextBoards();
             double bestScore = double.MinValue;
             Board bestBoard = null;
@@ -321,7 +292,9 @@ namespace ChessDotNetBackend
                     bestBoard = board;
                 }
             }
-            Console.WriteLine("Considered {1} outcomes, choosing move with score of {0}", bestScore, boardsConsidered );
+            TimeSpan dt = DateTime.UtcNow - t0;
+
+            Console.WriteLine("Considered {1} outcomes in {2}s, choosing move with score of {0}", bestScore, boardsConsidered, dt.TotalSeconds);
             return bestBoard;
         }
 
