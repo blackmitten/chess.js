@@ -266,10 +266,11 @@ namespace ChessDotNetBackend
         }
         */
 
-        double Minimax(int depth, bool maximizing, bool whitesTurn)
+        double Minimax(int depth, double alpha, double beta, bool maximizing, bool whitesTurn, ref long boardsConsidered)
         {
             if (depth == 0)
             {
+                boardsConsidered++;
                 double score = this.CalcWhitesScore();
                 return whitesTurn ? score : -score;
             }
@@ -279,7 +280,12 @@ namespace ChessDotNetBackend
                 double max = double.MinValue;
                 foreach (var board in boards)
                 {
-                    max = Math.Max(max, board.Minimax(depth - 1, !maximizing, whitesTurn));
+                    max = Math.Max(max, board.Minimax(depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered));
+                    alpha = Math.Max(alpha, max);
+                    if(alpha>=beta)
+                    {
+                        break;
+                    }
                 }
                 return max;
             }
@@ -288,7 +294,12 @@ namespace ChessDotNetBackend
                 double min = double.MaxValue;
                 foreach (var board in boards)
                 {
-                    min = Math.Min(min, board.Minimax(depth - 1, !maximizing, whitesTurn));
+                    min = Math.Min(min, board.Minimax(depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered));
+                    beta = Math.Min(beta, min);
+                    if(alpha>=beta)
+                    {
+                        break;
+                    }
                 }
                 return min;
             }
@@ -300,22 +311,23 @@ namespace ChessDotNetBackend
             IEnumerable<Board> boards = GetAllNextBoards();
             double bestScore = double.MinValue;
             Board bestBoard = null;
+            long boardsConsidered = 0;
             foreach (var board in boards)
             {
-                var score = board.Evaluate(WhitesTurn);
+                var score = board.Evaluate(WhitesTurn, ref boardsConsidered);
                 if (score > bestScore)
                 {
                     bestScore = score;
                     bestBoard = board;
                 }
             }
-            Console.WriteLine("Choosing move with score of {0}", bestScore);
+            Console.WriteLine("Considered {1} outcomes, choosing move with score of {0}", bestScore, boardsConsidered );
             return bestBoard;
         }
 
-        public double Evaluate(bool whitesTurn)
+        public double Evaluate(bool whitesTurn, ref long boardsConsidered)
         {
-            return Minimax(2, false, whitesTurn);
+            return Minimax(3, double.MinValue, double.MaxValue, false, whitesTurn, ref boardsConsidered);
         }
 
         public Board StupidMove()
