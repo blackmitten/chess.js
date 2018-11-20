@@ -6,22 +6,28 @@ namespace ChessDotNetBackend
 {
     public enum PieceType
     {
-        Pawn,
-        Rook,
-        Knight,
-        Bishop,
-        Queen,
-        King
+        WhitePawn,
+        WhiteRook,
+        WhiteKnight,
+        WhiteBishop,
+        WhiteQueen,
+        WhiteKing,
+        BlackPawn,
+        BlackRook,
+        BlackKnight,
+        BlackBishop,
+        BlackQueen,
+        BlackKing
     }
 
     public interface IPieceVisitor
     {
-        void Visit( Pawn pawn, object data );
-        void Visit( Rook rook, object data );
-        void Visit( Knight knight, object data );
-        void Visit( Bishop bishop, object data );
-        void Visit( Queen queen, object data );
-        void Visit( King king, object data );
+        void Visit(Pawn pawn, object data);
+        void Visit(Rook rook, object data);
+        void Visit(Knight knight, object data);
+        void Visit(Bishop bishop, object data);
+        void Visit(Queen queen, object data);
+        void Visit(King king, object data);
     }
 
     public interface IPiece
@@ -30,37 +36,38 @@ namespace ChessDotNetBackend
         bool White { get; }
         string Name { get; }
 
-        void Accept( IPieceVisitor visitor, object data );
+        void Accept(IPieceVisitor visitor, object data);
         IPiece Copy();
-        IEnumerable<Square> GetAllMoves( Board m_board );
-        bool IsMoveValid( Board board, Square destination );
+        IEnumerable<Square> GetAllMoves(Board m_board);
+        bool IsMoveValid(Board board, Square destination);
         double Value { get; }
         PieceType PieceType { get; }
+        bool IsPawn { get; }
     }
 
     static class Piece
     {
-        public static bool addMove( IPiece piece, Board board, List<Square> moves, Square destination )
+        public static bool addMove(IPiece piece, Board board, List<Square> moves, Square destination)
         {
-            if( destination == piece.CurrentPosition )
+            if (destination == piece.CurrentPosition)
             {
                 return true;
             }
-            if( piece.IsMoveValid( board, destination ) )
+            if (piece.IsMoveValid(board, destination))
             {
-                moves.Add( destination );
+                moves.Add(destination);
                 return true;
             }
             return false;
         }
 
-        public static bool IsMoveValid( IPiece piece, Board board, Square destination )
+        public static bool IsMoveValid(IPiece piece, Board board, Square destination)
         {
-            if( !destination.InBounds )
+            if (!destination.InBounds)
             {
                 return false;
             }
-            IPiece capturedPiece = board.GetPieceOnSquare( destination );
+            IPiece capturedPiece = board.GetPieceOnSquare(destination);
             bool correctCapture = capturedPiece == null || capturedPiece.White != piece.White;
             return correctCapture;
         }
@@ -72,78 +79,77 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public Pawn( Square currentPosition, bool white, int pieceNumber )
+        public Pawn(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Pawn" : "Black Pawn";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhitePawn : PieceType.BlackPawn;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
             var dir = White ? -1 : 1;
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 0, dir * 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 0, dir * 2 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, dir * 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, dir * 1 ) );
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, dir * 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, dir * 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, dir * 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, dir * 1));
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
             int nDir = White ? -1 : 1;  // which way can this pawn move?
-            if( ( destination.y - CurrentPosition.y ) * nDir > 2 )   // can never go further than two spaces
+            if ((destination.y - CurrentPosition.y) * nDir > 2)   // can never go further than two spaces
                 return false;
-            if( ( destination.y - CurrentPosition.y ) * nDir <= 0 )  // mustn't go backwards
+            if ((destination.y - CurrentPosition.y) * nDir <= 0)  // mustn't go backwards
                 return false;
-            if( ( ( destination.y - CurrentPosition.y ) * nDir > 1 ) && ( CurrentPosition.y != ( White ? 6 : 1 ) ) )  // can go two spaces if we haven't moved
+            if (((destination.y - CurrentPosition.y) * nDir > 1) && (CurrentPosition.y != (White ? 6 : 1)))  // can go two spaces if we haven't moved
                 return false;
-            if( ( destination.x == CurrentPosition.x ) && board.GetPieceOnSquare( destination ) != null )  // can't take forwards
+            if ((destination.x == CurrentPosition.x) && board.GetPieceOnSquare(destination) != null)  // can't take forwards
                 return false;
-            if( destination.x != CurrentPosition.x )
+            if (destination.x != CurrentPosition.x)
             {
-                if( board.GetPieceOnSquare( destination ) == null )
+                if (board.GetPieceOnSquare(destination) == null)
                 {
                     return false;
                 }
-                if( Math.Abs( destination.x - CurrentPosition.x ) > 1 )  // can take diagonally
+                if (Math.Abs(destination.x - CurrentPosition.x) > 1)  // can take diagonally
                 {
                     return false;
                 }
             }
-            return board.IsNothingInTheWay( this, destination );
+            return board.IsNothingInTheWay(this, destination);
 
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new Pawn( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new Pawn(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            Pawn p = ( Pawn ) obj;
+            Pawn p = (Pawn)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 1;
 
-        public PieceType PieceType => PieceType.Pawn;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => true;
     }
 
     public class Rook : IPiece
@@ -151,72 +157,71 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public Rook( Square currentPosition, bool white, int pieceNumber )
+        public Rook(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Rook" : "Black Rook";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhiteRook : PieceType.BlackRook;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
             int x = CurrentPosition.x;
             int y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x++, y)))
             { }
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y)))
             { }
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x, y++)))
             { }
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x, y-- ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x, y--)))
             { }
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
-            if( CurrentPosition.x != destination.x && CurrentPosition.y != destination.y )
+            if (CurrentPosition.x != destination.x && CurrentPosition.y != destination.y)
             {
                 return false;
             }
-            return board.IsNothingInTheWay( this, destination );
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new Rook( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new Rook(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            Rook p = ( Rook ) obj;
+            Rook p = (Rook)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 5;
 
-        public PieceType PieceType => PieceType.Rook;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => false;
     }
 
     public class Knight : IPiece
@@ -224,63 +229,62 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public Knight( Square currentPosition, bool white, int pieceNumber )
+        public Knight(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Knight" : "Black Knight";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhiteKnight : PieceType.BlackKnight;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 2, 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 2, -1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -2, 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -2, -1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, 2 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, 2 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, -2 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, -2 ) );
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(2, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(2, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-2, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, -2));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, -2));
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
             var dx = destination.x - CurrentPosition.x;
             var dy = destination.y - CurrentPosition.y;
             //  two spaces forward, one to either side...
-            return ( Math.Abs( dy ) == 2 && Math.Abs( dx ) == 1 ) || ( Math.Abs( dy ) == 1 && Math.Abs( dx ) == 2 );
+            return (Math.Abs(dy) == 2 && Math.Abs(dx) == 1) || (Math.Abs(dy) == 1 && Math.Abs(dx) == 2);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new Knight( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new Knight(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            Knight p = ( Knight ) obj;
+            Knight p = (Knight)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 3;
 
-        public PieceType PieceType => PieceType.Knight;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => false;
     }
 
     public class Bishop : IPiece
@@ -288,72 +292,70 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public Bishop( Square currentPosition, bool white, int pieceNumber )
+        public Bishop(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Bishop" : "Black Bishop";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhiteBishop: PieceType.BlackBishop;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
             int x = CurrentPosition.x;
             int y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x++, y++)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y++)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y-- ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y--)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y-- ) ) )
-                ;
+            while (Piece.addMove(this, board, moves, new Square(x++, y--))) ;
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
-            if( Math.Abs( destination.x - CurrentPosition.x ) != Math.Abs( destination.y - CurrentPosition.y ) )
+            if (Math.Abs(destination.x - CurrentPosition.x) != Math.Abs(destination.y - CurrentPosition.y))
             {
                 return false;
             }
-            return board.IsNothingInTheWay( this, destination );
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new Bishop( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new Bishop(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            Bishop p = ( Bishop ) obj;
+            Bishop p = (Bishop)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 3;
 
-        public PieceType PieceType => PieceType.Bishop;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => false;
     }
 
     public class Queen : IPiece
@@ -361,91 +363,90 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public Queen( Square currentPosition, bool white, int pieceNumber )
+        public Queen(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White Queen" : "Black Queen";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhiteQueen : PieceType.BlackQueen;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
             int x = CurrentPosition.x;
             int y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x++, y++)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y++)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y-- ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y--)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y-- ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x++, y--)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x++, y ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x++, y)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x--, y ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x--, y)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x, y++ ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x, y++)))
                 ;
             x = CurrentPosition.x;
             y = CurrentPosition.y;
-            while( Piece.addMove( this, board, moves, new Square( x, y-- ) ) )
+            while (Piece.addMove(this, board, moves, new Square(x, y--)))
                 ;
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
-            if( CurrentPosition.x != destination.x && CurrentPosition.y != destination.y )
+            if (CurrentPosition.x != destination.x && CurrentPosition.y != destination.y)
             {
-                if( Math.Abs( destination.x - CurrentPosition.x ) != Math.Abs( destination.y - CurrentPosition.y ) )
+                if (Math.Abs(destination.x - CurrentPosition.x) != Math.Abs(destination.y - CurrentPosition.y))
                 {
                     return false;
                 }
             }
-            return board.IsNothingInTheWay( this, destination );
+            return board.IsNothingInTheWay(this, destination);
         }
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new Queen( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new Queen(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            Queen p = ( Queen ) obj;
+            Queen p = (Queen)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 9;
 
-        public PieceType PieceType => PieceType.Queen;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => false;
     }
 
     public class King : IPiece
@@ -453,43 +454,42 @@ namespace ChessDotNetBackend
         public Square CurrentPosition { get; set; }
         public bool White { get; }
         public string Name { get; }
-        int m_pieceNumber;
 
-        public King( Square currentPosition, bool white, int pieceNumber )
+        public King(Square currentPosition, bool white)
         {
             CurrentPosition = currentPosition;
             White = white;
             Name = White ? "White King" : "Black King";
-            m_pieceNumber = pieceNumber;
+            PieceType = white ? PieceType.WhiteKing : PieceType.BlackKing;
         }
 
-        public void Accept( IPieceVisitor visitor, object data ) => visitor.Visit( this, data );
+        public void Accept(IPieceVisitor visitor, object data) => visitor.Visit(this, data);
 
-        public IEnumerable<Square> GetAllMoves( Board board )
+        public IEnumerable<Square> GetAllMoves(Board board)
         {
             var moves = new List<Square>();
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 0, 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 0, -1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, 0 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( 1, -1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, 1 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, 0 ) );
-            Piece.addMove( this, board, moves, CurrentPosition.Offset( -1, -1 ) );
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(0, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, 0));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(1, -1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 1));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, 0));
+            Piece.addMove(this, board, moves, CurrentPosition.Offset(-1, -1));
             return moves;
         }
 
-        public bool IsMoveValid( Board board, Square destination )
+        public bool IsMoveValid(Board board, Square destination)
         {
-            if( !Piece.IsMoveValid( this, board, destination ) )
+            if (!Piece.IsMoveValid(this, board, destination))
             {
                 return false;
             }
-            if( Math.Abs( destination.x - CurrentPosition.x ) > 1 )
+            if (Math.Abs(destination.x - CurrentPosition.x) > 1)
             {
                 return false;
             }
-            if( Math.Abs( destination.y - CurrentPosition.y ) > 1 )
+            if (Math.Abs(destination.y - CurrentPosition.y) > 1)
             {
                 return false;
             }
@@ -498,23 +498,23 @@ namespace ChessDotNetBackend
 
         public override string ToString() => Name + " " + CurrentPosition.ToString();
 
-        public IPiece Copy() => new King( CurrentPosition, White, m_pieceNumber );
+        public IPiece Copy() => new King(CurrentPosition, White);
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            if( obj == null || GetType() != obj.GetType() )
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            King p = ( King ) obj;
+            King p = (King)obj;
             return p.White == White && p.CurrentPosition == CurrentPosition;
         }
 
         public double Value => 1000;
 
-        public PieceType PieceType => PieceType.King;
+        public PieceType PieceType { get; }
 
-        public override int GetHashCode() => m_pieceNumber.GetHashCode();
+        public bool IsPawn => false;
     }
 
 }

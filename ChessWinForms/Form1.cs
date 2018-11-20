@@ -14,7 +14,6 @@ namespace ChessWinForms
     public partial class Form1 : Form
     {
         private ChessBoard2D chessBoard2D1;
-        private Board m_currentBoard;
         private Game m_game;
 
         public Form1()
