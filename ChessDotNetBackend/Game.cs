@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace ChessDotNetBackend
 {
@@ -26,16 +27,24 @@ namespace ChessDotNetBackend
 
         private void Play()
         {
-            if (m_currentBoard.WhitesTurn && !m_whiteHuman)
+            Thread thread = new Thread(() =>
             {
-                Board newBoard = m_currentBoard.ThinkAndMove();
-                m_userInterface.Update(newBoard);
-            }
-            else if (!m_currentBoard.WhitesTurn&&!m_blackHuman)
-            {
-                Board newBoard = m_currentBoard.ThinkAndMove();
-                m_userInterface.Update(newBoard);
-            }
+                if (m_currentBoard.WhitesTurn && !m_whiteHuman)
+                {
+                    m_userInterface.Thinking = true;
+                    Board newBoard = m_currentBoard.ThinkAndMove();
+                    m_userInterface.Update(newBoard);
+                    m_userInterface.Thinking = false;
+                }
+                else if (!m_currentBoard.WhitesTurn && !m_blackHuman)
+                {
+                    m_userInterface.Thinking = true;
+                    Board newBoard = m_currentBoard.ThinkAndMove();
+                    m_userInterface.Update(newBoard);
+                    m_userInterface.Thinking = false;
+                }
+            });
+            thread.Start();
         }
 
         private void BoardUpdated(object sender, BoardUpdateEventArgs e)

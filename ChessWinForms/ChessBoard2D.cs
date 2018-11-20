@@ -43,6 +43,17 @@ namespace ChessWinForms
             }
         }
 
+        bool m_thinking;
+        public bool Thinking
+        {
+            get => m_thinking;
+            set
+            {
+                m_thinking = value;
+                Invalidate();
+            }
+        }
+
         private void ChessBoard2D_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -81,7 +92,13 @@ namespace ChessWinForms
                     e.Graphics.DrawRectangle(m_highlightPen, square.x * SquareWidth, square.y * SquareWidth, SquareWidth, SquareWidth);
                 }
             }
+            if (m_thinking)
+            {
+                e.Graphics.FillRectangle(m_translucentBrush, 0, 0, m_width, m_width);
+            }
         }
+
+        Brush m_translucentBrush = new SolidBrush(Color.FromArgb(120, 0, 0, 0));
 
         public void Update(Board newBoard)
         {
@@ -209,7 +226,7 @@ namespace ChessWinForms
                 if (m_selectedPiece.IsMoveValid(m_board, clickedSquare))
                 {
                     m_board = m_board.MovePiece(m_selectedPiece, clickedSquare);
-                    BoardUpdated(this, new BoardUpdateEventArgs(m_board) );
+                    BoardUpdated(this, new BoardUpdateEventArgs(m_board));
                 }
                 m_selectedPiece = null;
             }
