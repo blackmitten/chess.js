@@ -78,9 +78,9 @@ namespace ChessTests
             Assert.IsTrue(pawn.IsMoveValid(board, new Square(4, 5)));
             Assert.IsTrue(pawn.IsMoveValid(board, new Square(4, 4)));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 3)));
-            board.Pieces.Add(new Pawn(new Square(4, 5), false));
-            board.Pieces.Add(new Pawn(new Square(3, 5), true));
-            board.Pieces.Add(new Pawn(new Square(5, 5), true));
+            board.Pieces.Add(new Pawn(new Square(4, 5), false, 1));
+            board.Pieces.Add(new Pawn(new Square(3, 5), true, 2));
+            board.Pieces.Add(new Pawn(new Square(5, 5), true, 3));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 5)));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(4, 4)));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(3, 5)));
@@ -90,11 +90,11 @@ namespace ChessTests
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(0, 2)));
             Assert.IsTrue(pawn.IsMoveValid(board, new Square(1, 2)));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(2, 2)));
-            board.Pieces.Add(new Pawn(new Square(0, 2), false));
+            board.Pieces.Add(new Pawn(new Square(0, 2), false, 4));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(0, 2)));
-            board.Pieces.Add(new Pawn(new Square(1, 2), true));
+            board.Pieces.Add(new Pawn(new Square(1, 2), true, 5));
             Assert.IsFalse(pawn.IsMoveValid(board, new Square(1, 2)));
-            board.Pieces.Add(new Pawn(new Square(2, 2), true));
+            board.Pieces.Add(new Pawn(new Square(2, 2), true, 6));
             Assert.IsTrue(pawn.IsMoveValid(board, new Square(2, 2)));
         }
 
@@ -114,9 +114,9 @@ namespace ChessTests
             Board board1 = new Board(board);
             Assert.AreNotSame(board, board1);
             Assert.AreEqual(board, board1);
-            board1.Pieces.Add(new Pawn(new Square(4, 4), true));
+            board1.Pieces.Add(new Pawn(new Square(4, 4), true, 1));
             Assert.AreNotEqual(board, board1);
-            board.Pieces.Add(new Pawn(new Square(4, 4), true));
+            board.Pieces.Add(new Pawn(new Square(4, 4), true, 2));
             Assert.AreEqual(board, board1);
         }
 
@@ -129,9 +129,9 @@ namespace ChessTests
             Board start = Board.InitNewGame();
             Assert.IsTrue(0 == start.CalcWhitesScore());
 
-            start.Pieces.Add(new Pawn(new Square(4, 4), true));
+            start.Pieces.Add(new Pawn(new Square(4, 4), true, 1));
             Assert.IsTrue(start.CalcWhitesScore() > 0);
-            start.Pieces.Add(new Queen(new Square(2, 4), false));
+            start.Pieces.Add(new Queen(new Square(2, 4), false, 2));
             Assert.IsTrue(start.CalcWhitesScore() < 0);
 
         }
@@ -141,13 +141,13 @@ namespace ChessTests
         { 
             Board pawn1 = new Board();
             Board pawn2 = new Board();
-            pawn1.Pieces.Add(new Pawn(new Square(4, 6), true));
-            pawn2.Pieces.Add(new Pawn(new Square(4, 5), true));
+            pawn1.Pieces.Add(new Pawn(new Square(4, 6), true, 1));
+            pawn2.Pieces.Add(new Pawn(new Square(4, 5), true, 2));
             Assert.IsTrue(pawn2.CalcWhitesScore() > pawn1.CalcWhitesScore());
             pawn1 = new Board();
             pawn2 = new Board();
-            pawn1.Pieces.Add(new Pawn(new Square(2, 4), false));
-            pawn2.Pieces.Add(new Pawn(new Square(2, 5), false));
+            pawn1.Pieces.Add(new Pawn(new Square(2, 4), false, 3));
+            pawn2.Pieces.Add(new Pawn(new Square(2, 5), false, 4));
             Assert.IsTrue(pawn2.CalcWhitesScore() < pawn1.CalcWhitesScore());
         }
 

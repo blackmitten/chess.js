@@ -7,9 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessWinForms", "ChessWinFo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessDotNetBackend", "..\ChessDotNetBackend\ChessDotNetBackend.csproj", "{1A39FE2D-4F52-4B92-88C0-93E25E713EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessTests", "..\ChessTests\ChessTests.csproj", "{D95553BB-F95B-4158-AE35-6B777A3DFFA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessTests", "..\ChessTests\ChessTests.csproj", "{D95553BB-F95B-4158-AE35-6B777A3DFFA7}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
