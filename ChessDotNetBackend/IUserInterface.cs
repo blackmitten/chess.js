@@ -17,7 +17,7 @@ namespace ChessDotNetBackend
     public interface IUserInterface
     {
         Board Board { set; }
-        bool Thinking { get; set; }
+        bool Thinking {  set; }
 
         event EventHandler<BoardUpdateEventArgs> BoardUpdated;
 

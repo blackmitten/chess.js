@@ -190,6 +190,10 @@ namespace ChessWinForms
 
         private void ChessBoard2D_MouseClick(object sender, MouseEventArgs e)
         {
+            if (m_thinking)
+            {
+                return;
+            }
             double squareWidth = m_width / 8;
             int x = (int)Math.Floor(e.X / squareWidth);
             int y = (int)Math.Floor(e.Y / squareWidth);
