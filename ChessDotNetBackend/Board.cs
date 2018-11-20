@@ -238,13 +238,14 @@ namespace ChessDotNetBackend
 
         double Minimax(int depth, double alpha, double beta, bool maximizing, bool whitesTurn, ref long boardsConsidered)
         {
+            bool sortOrder = (maximizing && !whitesTurn) || (!maximizing && whitesTurn);
             if (depth == 0)
             {
                 boardsConsidered++;
                 return CalcSidesScore(whitesTurn);
             }
             List<Board> boards = GetAllNextBoards();
-            boards.Sort((a, b) => a.CalcSidesScore(maximizing).CompareTo(b.CalcSidesScore(maximizing)));
+            boards.Sort((a, b) => a.CalcSidesScore(sortOrder).CompareTo(b.CalcSidesScore(sortOrder)));
             if (maximizing)
             {
                 double max = double.MinValue;
@@ -294,7 +295,7 @@ namespace ChessDotNetBackend
             }
             TimeSpan dt = DateTime.UtcNow - t0;
 
-            Console.WriteLine("Considered {1} outcomes in {2}s, choosing move with score of {0}", bestScore, boardsConsidered, dt.TotalSeconds);
+            Console.WriteLine("Considered {0} outcomes in {1}s, choosing move with score of {2}", boardsConsidered, dt.TotalSeconds, bestScore);
             return bestBoard;
         }
 

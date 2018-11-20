@@ -89,7 +89,6 @@
             this.buttonMove.TabIndex = 2;
             this.buttonMove.Text = "Move";
             this.buttonMove.UseVisualStyleBackColor = true;
-            this.buttonMove.Click += new System.EventHandler(this.buttonMove_Click);
             // 
             // Form1
             // 

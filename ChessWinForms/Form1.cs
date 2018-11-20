@@ -37,29 +37,6 @@ namespace ChessWinForms
 
         }
 
-        /*
-        private void ChessBoard2D1_BoardUpdated(object sender, BoardUpdateEventArgs e)
-        {
-            m_currentBoard = e.Board;
-            double whitesScore = m_currentBoard.CalcWhitesScore();
-            this.textBoxWhitesScore.Text = whitesScore.ToString("0.00");
-            if(m_currentBoard.WhitesTurn)
-            {
-                Board newBoard = m_currentBoard.ThinkAndMove();
-                chessBoard2D1.Update(newBoard);
-
-            }
-        }
-        */
-
-        private void buttonMove_Click(object sender, EventArgs e)
-        {
-            /*
-            Board newBoard = m_currentBoard.ThinkAndMove();
-            chessBoard2D1.Update(newBoard);
-            */
-        }
-        
 
     }
 }
