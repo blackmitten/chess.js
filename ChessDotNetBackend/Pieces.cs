@@ -71,7 +71,6 @@ namespace ChessDotNetBackend
             bool correctCapture = capturedPiece == null || capturedPiece.White != piece.White;
             return correctCapture;
         }
-
     }
 
     public class Pawn : IPiece

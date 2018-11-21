@@ -18,6 +18,30 @@ namespace ChessDotNetBackend
             }
         }
 
+        internal void DebugOutput()
+        {
+            Console.WriteLine("Board:");
+            for ( int y = 0; y < 8; y++ )
+            {
+                for ( int x = 0; x < 8; x++ )
+                {
+                    IPiece piece = GetPieceOnSquare( new Square( x, y ) );
+                    if ( piece != null )
+                    {
+                        PieceCode code = new PieceCode();
+                        piece.Accept( code, null );
+                        Console.Write( code.Code );
+                    }
+                    else
+                    {
+                        Console.Write( "•" );
+                    }
+                }
+                Console.WriteLine();
+            }
+
+        }
+
         public double CalcSidesScore( bool whitesTurn, TranspositionTable transpositionTable)
         {
             if( whitesTurn )
@@ -236,7 +260,9 @@ namespace ChessDotNetBackend
                     var moves = piece.GetAllMoves( this );
                     foreach( var move in moves )
                     {
-                        boards.Add( MovePiece( piece, move ) );
+                        Board newBoard = MovePiece( piece, move );
+                        newBoard.DebugOutput();
+                        boards.Add( newBoard );
                     }
                 }
             }
@@ -253,6 +279,10 @@ namespace ChessDotNetBackend
                 return CalcSidesScore( whitesTurn, transpositionTable );
             }
             List<Board> boards = GetAllNextBoards();
+            foreach(var board in boards)
+            {
+                board.CalcSidesScore( sortOrder, transpositionTable );
+            }
             boards.Sort( ( a, b ) => a.CalcSidesScore( sortOrder, transpositionTable ).CompareTo( b.CalcSidesScore( sortOrder, transpositionTable) ) );
             if( maximizing )
             {
@@ -311,7 +341,7 @@ namespace ChessDotNetBackend
 
         public double Evaluate( bool whitesTurn, ref long boardsConsidered, TranspositionTable transpositionTable)
         {
-            return Minimax( 1, double.MinValue, double.MaxValue, false, whitesTurn, ref boardsConsidered, transpositionTable );
+            return Minimax( 2, double.MinValue, double.MaxValue, false, whitesTurn, ref boardsConsidered, transpositionTable );
         }
 
         public override int GetHashCode()
