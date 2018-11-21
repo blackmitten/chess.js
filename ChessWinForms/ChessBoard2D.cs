@@ -44,7 +44,7 @@ namespace ChessWinForms
         }
 
         bool m_thinking;
-        public bool Thinking
+        public bool MachineThinking
         {
             get => m_thinking;
             set

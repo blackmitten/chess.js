@@ -9,7 +9,7 @@ namespace ChessTests
     {
         public Board Board { get; set; }
 
-        public bool Thinking { get; set; }
+        public bool MachineThinking { get; set; }
 
         public event EventHandler<BoardUpdateEventArgs> BoardUpdated;
 

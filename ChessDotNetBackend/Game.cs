@@ -32,17 +32,17 @@ namespace ChessDotNetBackend
             {
                 if (m_currentBoard.WhitesTurn && !m_whiteHuman)
                 {
-                    m_userInterface.Thinking = true;
+                    m_userInterface.MachineThinking = true;
                     Board newBoard = m_currentBoard.ThinkAndMove(m_transpositionTable);
                     m_userInterface.Update(newBoard);
-                    m_userInterface.Thinking = false;
+                    m_userInterface.MachineThinking = false;
                 }
                 else if (!m_currentBoard.WhitesTurn && !m_blackHuman)
                 {
-                    m_userInterface.Thinking = true;
+                    m_userInterface.MachineThinking = true;
                     Board newBoard = m_currentBoard.ThinkAndMove(m_transpositionTable);
                     m_userInterface.Update(newBoard);
-                    m_userInterface.Thinking = false;
+                    m_userInterface.MachineThinking = false;
                 }
             });
             thread.Start();
