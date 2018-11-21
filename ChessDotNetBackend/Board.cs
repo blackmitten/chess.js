@@ -20,6 +20,7 @@ namespace ChessDotNetBackend
 
         internal void DebugOutput()
         {
+            /*
             Console.WriteLine("Board:");
             for ( int y = 0; y < 8; y++ )
             {
@@ -39,7 +40,7 @@ namespace ChessDotNetBackend
                 }
                 Console.WriteLine();
             }
-
+            */
         }
 
         public double CalcSidesScore( bool whitesTurn, TranspositionTable transpositionTable)

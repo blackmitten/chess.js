@@ -17,7 +17,7 @@ namespace ChessDotNetBackend
                 Square s = piece.CurrentPosition;
                 Hash ^= ZobristTable.Instance.Table[s.x, s.y, (int)piece.PieceType];
             }
-            Console.WriteLine( Hash );
+//            Console.WriteLine( Hash );
         }
 
         public override string ToString() => Hash.ToString();
