@@ -18,20 +18,25 @@ namespace ChessDotNetBackend
             }
         }
 
-        public double CalcSidesScore( bool whitesTurn )
+        public double CalcSidesScore( bool whitesTurn, TranspositionTable transpositionTable)
         {
             if( whitesTurn )
             {
-                return CalcWhitesScore();
+                return CalcWhitesScore(transpositionTable);
             }
             else
             {
-                return -CalcWhitesScore();
+                return -CalcWhitesScore(transpositionTable);
             }
         }
 
-        public double CalcWhitesScore()
+        public double CalcWhitesScore(TranspositionTable transpositionTable)
         {
+            ZobristHash hash = new ZobristHash(this);
+            if(transpositionTable.ContainsLeafScore(hash))
+            {
+                return transpositionTable.LeafScore(hash);
+            }
             double whitesScore = 0;
             foreach( var piece in m_pieces )
             {
@@ -58,6 +63,7 @@ namespace ChessDotNetBackend
 
                 }
             }
+            transpositionTable.UpdateLeafScore(hash, whitesScore);
 
             return whitesScore;
         }
@@ -237,22 +243,24 @@ namespace ChessDotNetBackend
             return boards;
         }
 
-        double Minimax( int depth, double alpha, double beta, bool maximizing, bool whitesTurn, ref long boardsConsidered )
+        double Minimax( int depth, double alpha, double beta, bool maximizing, bool whitesTurn, ref long boardsConsidered,
+            TranspositionTable transpositionTable)
         {
             bool sortOrder = ( maximizing && !whitesTurn ) || ( !maximizing && whitesTurn );
             if( depth == 0 )
             {
                 boardsConsidered++;
-                return CalcSidesScore( whitesTurn );
+                return CalcSidesScore( whitesTurn, transpositionTable );
             }
             List<Board> boards = GetAllNextBoards();
-            boards.Sort( ( a, b ) => a.CalcSidesScore( sortOrder ).CompareTo( b.CalcSidesScore( sortOrder ) ) );
+            boards.Sort( ( a, b ) => a.CalcSidesScore( sortOrder, transpositionTable ).CompareTo( b.CalcSidesScore( sortOrder, transpositionTable) ) );
             if( maximizing )
             {
                 double max = double.MinValue;
                 foreach( var board in boards )
                 {
-                    max = Math.Max( max, board.Minimax( depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered ) );
+                    max = Math.Max( max, board.Minimax( depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered,
+                        transpositionTable) );
                     alpha = Math.Max( alpha, max );
                     if( alpha >= beta )
                     {
@@ -266,7 +274,8 @@ namespace ChessDotNetBackend
                 double min = double.MaxValue;
                 foreach( var board in boards )
                 {
-                    min = Math.Min( min, board.Minimax( depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered ) );
+                    min = Math.Min( min, board.Minimax( depth - 1, alpha, beta, !maximizing, whitesTurn, ref boardsConsidered,
+                        transpositionTable) );
                     beta = Math.Min( beta, min );
                     if( alpha >= beta )
                     {
@@ -278,7 +287,7 @@ namespace ChessDotNetBackend
 
         }
 
-        public Board ThinkAndMove()
+        public Board ThinkAndMove(TranspositionTable transpositionTable)
         {
             DateTime t0 = DateTime.UtcNow;
             IEnumerable<Board> boards = GetAllNextBoards();
@@ -287,7 +296,7 @@ namespace ChessDotNetBackend
             long boardsConsidered = 0;
             foreach( var board in boards )
             {
-                var score = board.Evaluate( WhitesTurn, ref boardsConsidered );
+                var score = board.Evaluate( WhitesTurn, ref boardsConsidered, transpositionTable );
                 if( score > bestScore )
                 {
                     bestScore = score;
@@ -300,43 +309,9 @@ namespace ChessDotNetBackend
             return bestBoard;
         }
 
-        public double Evaluate( bool whitesTurn, ref long boardsConsidered )
+        public double Evaluate( bool whitesTurn, ref long boardsConsidered, TranspositionTable transpositionTable)
         {
-            return Minimax( 4, double.MinValue, double.MaxValue, false, whitesTurn, ref boardsConsidered );
-        }
-
-        public Board StupidMove()
-        {
-            Board selectedBoard = null;
-
-            IEnumerable<Board> boards = GetAllNextBoards();
-            double maxScore = double.MinValue;
-            double minScore = double.MaxValue;
-            Board maxScoreBoard = null;
-            Board minScoreBoard = null;
-            foreach( var board in boards )
-            {
-                var score = board.CalcWhitesScore();
-                if( score > maxScore )
-                {
-                    maxScore = score;
-                    maxScoreBoard = board;
-                }
-                if( score < minScore )
-                {
-                    minScore = score;
-                    minScoreBoard = board;
-                }
-            }
-            if( WhitesTurn )
-            {
-                selectedBoard = maxScoreBoard;
-            }
-            else
-            {
-                selectedBoard = minScoreBoard;
-            }
-            return selectedBoard;
+            return Minimax( 1, double.MinValue, double.MaxValue, false, whitesTurn, ref boardsConsidered, transpositionTable );
         }
 
         public override int GetHashCode()

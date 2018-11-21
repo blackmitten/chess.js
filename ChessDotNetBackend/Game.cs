@@ -11,6 +11,7 @@ namespace ChessDotNetBackend
         Board m_currentBoard;
         bool m_whiteHuman;
         bool m_blackHuman;
+        TranspositionTable m_transpositionTable = new TranspositionTable();
 
         public Game(bool whiteHuman, bool blackHuman, IUserInterface userInterface)
         {
@@ -32,14 +33,14 @@ namespace ChessDotNetBackend
                 if (m_currentBoard.WhitesTurn && !m_whiteHuman)
                 {
                     m_userInterface.Thinking = true;
-                    Board newBoard = m_currentBoard.ThinkAndMove();
+                    Board newBoard = m_currentBoard.ThinkAndMove(m_transpositionTable);
                     m_userInterface.Update(newBoard);
                     m_userInterface.Thinking = false;
                 }
                 else if (!m_currentBoard.WhitesTurn && !m_blackHuman)
                 {
                     m_userInterface.Thinking = true;
-                    Board newBoard = m_currentBoard.ThinkAndMove();
+                    Board newBoard = m_currentBoard.ThinkAndMove(m_transpositionTable);
                     m_userInterface.Update(newBoard);
                     m_userInterface.Thinking = false;
                 }

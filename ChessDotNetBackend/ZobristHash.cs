@@ -6,7 +6,7 @@ namespace ChessDotNetBackend
 {
     public struct ZobristHash
     {
-        long Hash;
+        public long Hash;
 
         public ZobristHash(Board board)
         {
@@ -17,5 +17,7 @@ namespace ChessDotNetBackend
                 Hash ^= ZobristTable.Instance.Table[s.x, s.y, (int)piece.PieceType];
             }
         }
+
+        public override string ToString() => Hash.ToString();
     }
 }
