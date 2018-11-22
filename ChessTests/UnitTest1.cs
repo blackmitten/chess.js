@@ -170,11 +170,13 @@ namespace ChessTests
             Assert.AreNotEqual(h4, h3);
         }
 
+        /*
         [TestMethod]
         public void TestTranspositionTablePerformance()
         {
             IUserInterface userInterface = new MockUI();
             Game game = new Game(false, false, userInterface);
         }
+        */
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
@@ -9,14 +10,16 @@ namespace ChessDotNetBackend
     {
         IUserInterface m_userInterface;
         Board m_currentBoard;
-        bool m_whiteHuman;
-        bool m_blackHuman;
+        IPlayer m_white;
+        IPlayer m_black;
         TranspositionTable m_transpositionTable = new TranspositionTable();
 
-        public Game(bool whiteHuman, bool blackHuman, IUserInterface userInterface)
+        public Game(IPlayer white, IPlayer black, IUserInterface userInterface)
         {
-            m_whiteHuman = whiteHuman;
-            m_blackHuman = blackHuman;
+            Trace.Assert(white.White);
+            Trace.Assert(!black.White);
+            m_white = white;
+            m_black = black;
             m_userInterface = userInterface;
             m_currentBoard = Board.InitNewGame();
 
@@ -30,6 +33,14 @@ namespace ChessDotNetBackend
         {
             Thread thread = new Thread(() =>
             {
+                bool gameOver = false;
+                while (!gameOver)
+                {
+                    m_white.Play();
+                    m_black.Play();
+                }
+
+                /*
                 if (m_currentBoard.WhitesTurn && !m_whiteHuman)
                 {
                     m_userInterface.MachineThinking = true;
@@ -44,6 +55,7 @@ namespace ChessDotNetBackend
                     m_userInterface.Update(newBoard);
                     m_userInterface.MachineThinking = false;
                 }
+                */
             });
             thread.Start();
         }

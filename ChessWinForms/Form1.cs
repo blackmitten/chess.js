@@ -29,7 +29,7 @@ namespace ChessWinForms
             this.chessBoard2D1.TabIndex = 0;
             this.panel3.Controls.Add(this.chessBoard2D1);
 
-            m_game = new Game(true, false, this.chessBoard2D1);
+            m_game = new Game( new HumanPlayer(true, chessBoard2D1), new HumanPlayer(false, chessBoard2D1), chessBoard2D1);
             //m_game = new Game(false, true, this.chessBoard2D1);
             //m_game = new Game(true, true, this.chessBoard2D1);
             //m_game = new Game(false, false, this.chessBoard2D1);
